@@ -29,6 +29,14 @@ float emf(float N, float phi, float t) {
   return  sol;
 }
 
+float dFluxdT(float phi, float t){
+  float sol= phi/t;
+  return sol;
+}
+
+float flux(float B, float area){
+ return B*area; 
+}
 //draw() is run continuously
 void draw() {
   if (hasClicked) {
