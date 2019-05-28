@@ -13,14 +13,30 @@ float flux = 10;
 float loops = 1;
 float time = 10;
 
+//=================BOX VARIABLES=============================
+float bx;
+float by;
+int boxSize = 75;
+boolean overBox = false;
+boolean locked = false;
+float xOffset = 0.0; 
+float yOffset = 0.0; 
+
+//========================================
 
 
 //runs once and sets up screen size and color
 void setup() {
-  size(1024, 600);
+  size(1000, 1000);
   background(0, 0, 0);
 
-  //wire = createShape();
+rectMode(RADIUS);  // Set rectMode to RADIUS
+fill(255);  // Set fill to white
+rect(500, 500, 250, 250);  // Draw white rect using RADIUS mode
+
+rectMode(CENTER);  // Set rectMode to CENTER
+fill(0);  // Set fill to gray
+rect(500, 500, 400, 400);  // Draw gray rect using CENTER mode
 }
 
 //emf=-N(dFlux/dTime)
@@ -37,6 +53,8 @@ float dFluxdT(float phi, float t){
 float flux(float B, float area){
  return B*area; 
 }
+
+
 //draw() is run continuously
 void draw() {
   if (hasClicked) {
