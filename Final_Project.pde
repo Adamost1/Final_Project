@@ -19,10 +19,9 @@ float by;
 int boxSize = 75;
 boolean overBox = false;
 boolean locked = false;
-float xOffset = 0.0; 
-float yOffset = 0.0; 
 
-//========================================
+
+//https://processing.org/examples/mousefunctions.html
 
 
 //runs once and sets up screen size and color
@@ -33,6 +32,8 @@ void setup() {
   bx = width/2.0;
   by = height/2.0;
   rectMode(RADIUS);
+
+
   /*
 rectMode(RADIUS);  // Set rectMode to RADIUS
    fill(255);  // Set fill to white
@@ -68,17 +69,20 @@ void draw() {
     mouseY > by-boxSize && mouseY < by+boxSize) {
     overBox = true;  
     if (!locked) { 
-      stroke(255); 
-      fill(153);
+     stroke(20,75,200); //highlights object
+      fill(255);
     }
   } else {
-    stroke(153);
-    fill(153);
+  //  stroke(20,75,200);
+    fill(255);
     overBox = false;
   }
 
-  // Draw the box
+  // Draw the wire, represented by a box in a box
   rect(bx, by, boxSize, boxSize);
+  fill(0);
+  rect(bx, by, boxSize -10, boxSize -10);
+  fill(0);
 }
 
 void mousePressed() {
@@ -88,14 +92,13 @@ void mousePressed() {
   } else {
     locked = false;
   }
-  xOffset = mouseX-bx; 
-  yOffset = mouseY-by;
+
 }
 
 void mouseDragged() {
   if (locked) {
-    bx = mouseX-xOffset; 
-    by = mouseY-yOffset;
+    bx = mouseX; 
+    by = mouseY;
   }
 }
 
