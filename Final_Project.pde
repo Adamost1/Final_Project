@@ -30,13 +30,18 @@ void setup() {
   size(1000, 1000);
   background(0, 0, 0);
 
+  bx = width/2.0;
+  by = height/2.0;
+  rectMode(RADIUS);
+  /*
 rectMode(RADIUS);  // Set rectMode to RADIUS
-fill(255);  // Set fill to white
-rect(500, 500, 250, 250);  // Draw white rect using RADIUS mode
-
-rectMode(CENTER);  // Set rectMode to CENTER
-fill(0);  // Set fill to gray
-rect(500, 500, 400, 400);  // Draw gray rect using CENTER mode
+   fill(255);  // Set fill to white
+   rect(500, 500, 250, 250);  // Draw white rect using RADIUS mode
+   
+   rectMode(CENTER);  // Set rectMode to CENTER
+   fill(0);  // Set fill to gray
+   rect(500, 500, 400, 400);  // Draw gray rect using CENTER mode
+   */
 }
 
 //emf=-N(dFlux/dTime)
@@ -45,22 +50,59 @@ float emf(float N, float phi, float t) {
   return  sol;
 }
 
-float dFluxdT(float phi, float t){
+float dFluxdT(float phi, float t) {
   float sol= phi/t;
   return sol;
 }
 
-float flux(float B, float area){
- return B*area; 
+float flux(float B, float area) {
+  return B*area;
 }
 
 
-//draw() is run continuously
-void draw() {
-  if (hasClicked) {
-    rect(600, 100, xSide, ySide, 7);
+void draw() { 
+  background(0);
+
+  // Test if the cursor is over the box 
+  if (mouseX > bx-boxSize && mouseX < bx+boxSize && 
+    mouseY > by-boxSize && mouseY < by+boxSize) {
+    overBox = true;  
+    if (!locked) { 
+      stroke(255); 
+      fill(153);
+    }
+  } else {
+    stroke(153);
+    fill(153);
+    overBox = false;
+  }
+
+  // Draw the box
+  rect(bx, by, boxSize, boxSize);
+}
+
+void mousePressed() {
+  if (overBox) { 
+    locked = true; 
+    fill(255, 255, 255);
+  } else {
+    locked = false;
+  }
+  xOffset = mouseX-bx; 
+  yOffset = mouseY-by;
+}
+
+void mouseDragged() {
+  if (locked) {
+    bx = mouseX-xOffset; 
+    by = mouseY-yOffset;
   }
 }
+
+void mouseReleased() {
+  locked = false;
+}
+
 
 //after a mouse click, it updates variables
 void mouseClicked() {
