@@ -32,6 +32,7 @@ void setup() {
   size(2000, 1500);
   background(0, 0, 0);
 
+
   bx = width/2.0;
   by = height/2.0;
   rectMode(RADIUS);
@@ -63,26 +64,23 @@ float flux(float B, float area) {
   return B*area;
 }
 
-
-void draw() { 
-  background(0);
-  if(bx < xEnd && bx > xStart && by < yEnd && by >yStart ){
-   println("INSIDE FIELD");
+void drawWire() {
+  if (bx < xEnd && bx > xStart && by < yEnd  && by >yStart ) {
+    println("INSIDE FIELD");
+  } else {
+    println("not in field");
   }
-   else{
-     println("not in field");
-   }
-  
+
   // Test if the cursor is over the box 
   if (mouseX > bx-boxSize && mouseX < bx+boxSize && 
     mouseY > by-boxSize && mouseY < by+boxSize) {
     overBox = true;  
     if (!locked) { 
-     stroke(20,75,200); //highlights object blue
+      //stroke(20,75,200); //highlights object blue
       fill(255);
     }
   } else {
-  //  stroke(20,75,200);
+    //  stroke(20,75,200);
     fill(255);
     overBox = false;
   }
@@ -94,15 +92,26 @@ void draw() {
   fill(0);
 }
 
+void drawField() {
+  fill(255);
+  rect(xStart + 300, yStart + 300, 300, 300);
+}
+void draw() { 
+  background(0);
+  drawField();
+  drawWire();
+}
+
+
 void mousePressed() {
   if (overBox) { 
     locked = true; 
-    fill(255, 255, 255);
+    //fill(255);
   } else {
     locked = false;
   }
-
 }
+
 
 void mouseDragged() {
   if (locked) {
