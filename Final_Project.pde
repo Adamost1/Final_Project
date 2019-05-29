@@ -1,9 +1,11 @@
 boolean hasClicked = false;
 //Magnetic field coordinates (stays the same)
-float xStart = 500;
-float xEnd = xStart + 300;
-float yStart = 500;
-float yEnd = yStart +300;
+float xField = 500; //x coor of center of field
+//float xEnd = xField + 300; 
+float yField = 500; //y coor of center of field
+//float yEnd = yField +300;
+float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
+float fieldLength = 300; //half of length of field
 
 
 
@@ -33,20 +35,10 @@ void setup() {
   background(0, 0, 0);
 
 
-  bx = width/2.0;
-  by = height/2.0;
+  bx = width/2.0; //center x coor
+  by = height/2.0; //center y coor
   rectMode(RADIUS);
 
-
-  /*
-rectMode(RADIUS);  // Set rectMode to RADIUS
-   fill(255);  // Set fill to white
-   rect(500, 500, 250, 250);  // Draw white rect using RADIUS mode
-   
-   rectMode(CENTER);  // Set rectMode to CENTER
-   fill(0);  // Set fill to gray
-   rect(500, 500, 400, 400);  // Draw gray rect using CENTER mode
-   */
 }
 
 //emf=-N(dFlux/dTime)
@@ -65,7 +57,7 @@ float flux(float B, float area) {
 }
 
 void drawWire() {
-  if (bx < xEnd && bx > xStart && by < yEnd  && by >yStart ) {
+  if (bx < xField + fieldWidth && bx > xField - fieldWidth && by < yField + fieldLength  && by >yField - fieldWidth ) {
     println("INSIDE FIELD");
   } else {
     println("not in field");
@@ -87,14 +79,16 @@ void drawWire() {
 
   // Draw the wire, represented by a box in a box
   rect(bx, by, boxSize, boxSize);
-  fill(0);
+  fill(0,0,0,100);
   rect(bx, by, boxSize -10, boxSize -10);
-  fill(0);
+  
+  //useless code but dont remove 
+  //fill(0);
 }
 
 void drawField() {
   fill(255);
-  rect(xStart + 300, yStart + 300, 300, 300);
+  rect(xField, yField, fieldWidth, fieldLength);
 }
 void draw() { 
   background(0);
