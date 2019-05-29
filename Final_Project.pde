@@ -1,22 +1,25 @@
-boolean hasClicked = false;  
-float xSide= 400;
-float ySide = 400;
-PShape wire;
-float theta = 90; //change when implementing rotate
+boolean hasClicked = false;
+//Magnetic field coordinates (stays the same)
+float xStart = 500;
+float xEnd = xStart + 300;
+float yStart = 500;
+float yEnd = yStart +300;
 
+
+
+//Formula Variables
+float theta = 90; //change when implementing rotate
 //B and A can be used to calculate dFlux
 float area = 10;             
 float magneticField = 10;
-
-//===========================
 float flux = 10;
 float loops = 1;
 float time = 10;
 
-//=================BOX VARIABLES=============================
+//=================BOX/WIRE VARIABLES=============================
 float bx;
 float by;
-int boxSize = 75;
+int boxSize = 200;
 boolean overBox = false;
 boolean locked = false;
 
@@ -26,7 +29,7 @@ boolean locked = false;
 
 //runs once and sets up screen size and color
 void setup() {
-  size(1000, 1000);
+  size(2000, 1500);
   background(0, 0, 0);
 
   bx = width/2.0;
@@ -63,13 +66,19 @@ float flux(float B, float area) {
 
 void draw() { 
   background(0);
-
+  if(bx < xEnd && bx > xStart && by < yEnd && by >yStart ){
+   println("INSIDE FIELD");
+  }
+   else{
+     println("not in field");
+   }
+  
   // Test if the cursor is over the box 
   if (mouseX > bx-boxSize && mouseX < bx+boxSize && 
     mouseY > by-boxSize && mouseY < by+boxSize) {
     overBox = true;  
     if (!locked) { 
-     stroke(20,75,200); //highlights object
+     stroke(20,75,200); //highlights object blue
       fill(255);
     }
   } else {
@@ -99,6 +108,8 @@ void mouseDragged() {
   if (locked) {
     bx = mouseX; 
     by = mouseY;
+    //test coordinate change functionality
+    //println(bx,by);
   }
 }
 
