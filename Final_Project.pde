@@ -26,8 +26,8 @@ float time = 10;
 //=================WIRE VARIABLES=============================
 float xWire;
 float yWire;
-float wireLength = 200;
-float wireWidth = 200;
+float wireLength = 100;
+float wireWidth = 100;
 
 boolean overWire = false;
 boolean locked = false;
@@ -63,21 +63,55 @@ float flux(float B, float area) {
   return B*area;
 }
 
-float areaInsideField(){
-  float xOverlap = (xField + fieldWidth) - (xWire - wireWidth);
-  float yOverlap = (yField + fieldLength) - (yWire - wireLength);
-  return xOverlap * yOverlap;
+float areaInsideField() {
+  float leftField = xField - fieldWidth; //left edge of field
+  float rightField = xField + fieldWidth; //right edge of field
+  float upperField = yField - fieldLength; //upper edge of field
+  float lowerField = yField + fieldLength; //lower edge of field
+
+  float leftWire = xWire - wireWidth; //left edge of wire
+  float rightWire = xWire + wireWidth; //right edge of wire
+  float upperWire = yWire - wireLength; //upper edge of wire
+  float lowerWire = yWire + wireLength; //lower edge of wire
+
+  float xOverlap;
+  float yOverlap;
+
+  if (leftWire < leftField) { //if the wire extends past the left of field
+    xOverlap = rightWire - leftField;
+  } else if (rightWire < rightField) { //if the width of the wire is contained in the field
+    xOverlap = rightWire - leftWire;
+  } else { //if wire extends past right of field
+    xOverlap = rightField - leftWire;
+  }
+
+  if ( upperWire < upperField) { //if wire extends above field
+    yOverlap = lowerWire - upperField;
+  } else if (lowerWire < lowerField) { //if length of the wire is contained in the field
+    yOverlap = lowerWire - upperWire;
+  } else { //if the wire extends below the field
+    yOverlap = lowerField - upperWire;
+  }
+
+  float returnVal = xOverlap * yOverlap;
+  
+  if(returnVal < 0){ //if the wire is outside the field, return 0
+   return 0; 
+  }
+  else{
+   return returnVal; 
+  }
 }
 void drawWire() {
-  
+
   /* //used to test basic inside/out functionality
-  if (xWire < xField + fieldWidth && xWire> xField - fieldWidth && yWire < yField + fieldLength  && yWire >yField - fieldLength ) {
-    println("INSIDE FIELD");
-  } else {
-    println("not in field");
-  }
-  */
-  
+   if (xWire < xField + fieldWidth && xWire> xField - fieldWidth && yWire < yField + fieldLength  && yWire >yField - fieldLength ) {
+   println("INSIDE FIELD");
+   } else {
+   println("not in field");
+   }
+   */
+
   println("Area in field: " + areaInsideField());
 
   // Test if the cursor is over the wire 
@@ -92,21 +126,19 @@ void drawWire() {
   rect(xWire, yWire, wireWidth, wireLength);
   fill(0);
   rect(xWire, yWire, wireWidth -10, wireLength -10);
-
-
 }
 
 
 void drawField() {
   fill(255);
-  
+
   //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
-  
+
   //nested for loops to make dotted pattern
   for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
     for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
 
-       //if field is into page, field turns red. If it is out of page, it turns green.
+      //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
         fill(255, 0, 0);
       } else {
