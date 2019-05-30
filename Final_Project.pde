@@ -1,4 +1,5 @@
 boolean hasClicked = false;
+
 //Magnetic field coordinates (stays the same)
 float xField = 500; //x coor of center of field
 //float xEnd = xField + 300; 
@@ -7,6 +8,7 @@ float yField = 500; //y coor of center of field
 float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
 float fieldLength = 300; //half of length of field
 
+boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
 
 //Formula Variables
@@ -64,20 +66,14 @@ void drawWire() {
   }
 
   // Test if the cursor is over the box 
-  if (mouseX > bx-boxSize && mouseX < bx+boxSize && 
-    mouseY > by-boxSize && mouseY < by+boxSize) {
-    overBox = true;  
-    if (!locked) { 
-      //stroke(20,75,200); //highlights object blue
-      fill(255);
-    }
+  if (mouseX > bx-boxSize && mouseX < bx+boxSize && mouseY > by-boxSize && mouseY < by+boxSize) {
+    overBox = true;
   } else {
-    //  stroke(20,75,200);
-    fill(255);
     overBox = false;
   }
 
-  // Draw the wire, represented by a box in a box
+  // Draw the wire in it's new position, represented by a box in a box
+  fill(255);
   rect(bx, by, boxSize, boxSize);
   fill(0);
   rect(bx, by, boxSize -10, boxSize -10);
@@ -86,13 +82,23 @@ void drawWire() {
   //fill(0);
 }
 
+
 void drawField() {
   fill(255);
   //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
-  
+
+
   //nested for loops to make dotted pattern
   for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
     for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
+
+       //if field is into page, field turns red. If it is out of page, it turns green.
+      if (isFieldIn) {
+        fill(255, 0, 0);
+      } else {
+        fill(0, 255, 0);
+      }
+
       ellipse(i, j, 3, 3);
     }
   }
@@ -106,8 +112,7 @@ void draw() {
 
 void mousePressed() {
   if (overBox) { 
-    locked = true; 
-    //fill(255);
+    locked = true;
   } else {
     locked = false;
   }
