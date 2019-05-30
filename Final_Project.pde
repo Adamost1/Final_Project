@@ -38,7 +38,7 @@ void setup() {
   bx = width/2.0; //center x coor
   by = height/2.0; //center y coor
   rectMode(RADIUS);
-
+  ellipseMode(RADIUS);
 }
 
 //emf=-N(dFlux/dTime)
@@ -79,16 +79,23 @@ void drawWire() {
 
   // Draw the wire, represented by a box in a box
   rect(bx, by, boxSize, boxSize);
-  fill(0,0,0,100);
+  fill(0);
   rect(bx, by, boxSize -10, boxSize -10);
-  
+
   //useless code but dont remove 
   //fill(0);
 }
 
 void drawField() {
   fill(255);
-  rect(xField, yField, fieldWidth, fieldLength);
+  //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
+  
+  //nested for loops to make dotted pattern
+  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
+    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
+      ellipse(i, j, 3, 3);
+    }
+  }
 }
 void draw() { 
   background(0);
