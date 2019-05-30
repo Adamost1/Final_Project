@@ -17,9 +17,10 @@ boolean isFieldIn = true; //true if the field is into page, false if field is ou
 //Formula Variables
 float theta = 90; //change when implementing rotate
 //B and A can be used to calculate dFlux
-float area = 10;             
-float magneticField = 10;
-float flux = 10;
+float area = 10;
+
+float bField = 10; //to be changeable
+
 float loops = 1;
 float time = 10;
 
@@ -32,6 +33,7 @@ float wireWidth = 100;
 boolean overWire = false;
 boolean locked = false;
 
+PFont f;
 
 //https://processing.org/examples/mousefunctions.html
 
@@ -46,6 +48,7 @@ void setup() {
   yWire = height/2.0; //center y coor
   rectMode(RADIUS);
   ellipseMode(RADIUS);
+  f = createFont("Arial", 16);
 }
 
 //emf=-N(dFlux/dTime)
@@ -94,14 +97,14 @@ float areaInsideField() {
   }
 
   float returnVal = xOverlap * yOverlap;
-  
-  if(returnVal < 0){ //if the wire is outside the field, return 0
-   return 0; 
-  }
-  else{
-   return returnVal; 
+
+  if (returnVal < 0) { //if the wire is outside the field, return 0
+    return 0;
+  } else {
+    return returnVal;
   }
 }
+
 void drawWire() {
 
   /* //used to test basic inside/out functionality
@@ -151,9 +154,16 @@ void drawField() {
 }
 
 void draw() { 
+
   background(0);
+
   drawField();
   drawWire();
+
+  textSize(100);
+  fill(255);
+  text("Area: " + areaInsideField() + "\n" + "Flux: " + flux(bField, areaInsideField()), 700, 500);
+  
 }
 
 
@@ -183,5 +193,5 @@ void mouseReleased() {
 //after a mouse click, it updates variables
 void mouseClicked() {
   hasClicked = !hasClicked;
-  println(emf(loops, flux, time));
+  
 }
