@@ -15,14 +15,15 @@ boolean isFieldIn = true; //true if the field is into page, false if field is ou
 
 
 //Formula Variables
-float theta = 90; //change when implementing rotate
+float theta = 90; //change if we want to implement rotate
 //B and A can be used to calculate dFlux
 float area = 10;
 
 float bField = 10; //to be changeable
 
 float loops = 1;
-float time = 10;
+float timeStart;
+float timeEnd;
 
 //=================WIRE VARIABLES=============================
 float xWire;
@@ -34,6 +35,8 @@ boolean overWire = false;
 boolean locked = false;
 
 PFont f;
+
+
 
 //https://processing.org/examples/mousefunctions.html
 
@@ -52,18 +55,15 @@ void setup() {
 }
 
 //emf=-N(dFlux/dTime)
-float emf(float N, float phi, float t) {
-  float sol= ((-1)*N*phi)/t;
-  return  sol;
-}
 
-float dFluxdT(float phi, float t) {
-  float sol= phi/t;
-  return sol;
-}
 
 float flux(float B, float area) {
   return B*area;
+}
+
+float emf(){
+ 
+  return loops;
 }
 
 float areaInsideField() {
@@ -126,9 +126,16 @@ void drawWire() {
 
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
-  rect(xWire, yWire, wireWidth, wireLength);
+  rect(xWire -  wireWidth, yWire , 10, wireLength + 5);
+  rect(xWire +  wireWidth, yWire, 10, wireLength + 5);
+  rect(xWire, yWire - wireLength, wireWidth + 5  ,10);
+  rect(xWire, yWire + wireLength, wireWidth + 5, 10);
+  
+  /*//OLD wire implementation
   fill(0);
   rect(xWire, yWire, wireWidth -10, wireLength -10);
+  */
+  
 }
 
 
@@ -155,6 +162,8 @@ void drawField() {
 
 void draw() { 
 
+  int m = millis();
+
   background(0);
 
   drawField();
@@ -162,12 +171,13 @@ void draw() {
 
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\n" + "Flux: " + flux(bField, areaInsideField()), 700, 500);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nTime Elapsed: " + timeEnd, 700, 500);
   
 }
 
 
 void mousePressed() {
+  timeStart = millis();
   if (overWire) { 
     locked = true;
   } else {
@@ -187,6 +197,7 @@ void mouseDragged() {
 
 void mouseReleased() {
   locked = false;
+  timeEnd = millis();
 }
 
 
