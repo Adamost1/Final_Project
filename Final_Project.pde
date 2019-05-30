@@ -3,10 +3,10 @@ boolean hasClicked = false;
 //Magnetic field coordinates (stays the same)
 float xField = 500; //x coor of center of field
 //float xEnd = xField + 300; 
-float yField = 500; //y coor of center of field
+float yField = 800; //y coor of center of field
 //float yEnd = yField +300;
 float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
-float fieldLength = 300; //half of length of field
+float fieldLength = 600; //half of length of field
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
@@ -59,7 +59,7 @@ float flux(float B, float area) {
 }
 
 void drawWire() {
-  if (bx < xField + fieldWidth && bx > xField - fieldWidth && by < yField + fieldLength  && by >yField - fieldWidth ) {
+  if (bx < xField + fieldWidth && bx > xField - fieldWidth && by < yField + fieldLength  && by >yField - fieldLength ) {
     println("INSIDE FIELD");
   } else {
     println("not in field");
@@ -124,7 +124,7 @@ void mouseDragged() {
     bx = mouseX; 
     by = mouseY;
     //test coordinate change functionality
-    //println(bx,by);
+    println(bx,by);
   }
 }
 
