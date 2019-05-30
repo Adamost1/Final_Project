@@ -1,5 +1,7 @@
 boolean hasClicked = false;
 
+//=============== FIELD VARIABLES ===========================
+
 //Magnetic field coordinates (stays the same)
 float xField = 500; //x coor of center of field
 //float xEnd = xField + 300; 
@@ -7,6 +9,7 @@ float yField = 800; //y coor of center of field
 //float yEnd = yField +300;
 float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
 float fieldLength = 600; //half of length of field
+
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
@@ -20,11 +23,13 @@ float flux = 10;
 float loops = 1;
 float time = 10;
 
-//=================BOX/WIRE VARIABLES=============================
-float bx;
-float by;
-int boxSize = 200;
-boolean overBox = false;
+//=================WIRE VARIABLES=============================
+float xWire;
+float yWire;
+float wireLength = 200;
+float wireWidth = 200;
+
+boolean overWire = false;
 boolean locked = false;
 
 
@@ -37,8 +42,8 @@ void setup() {
   background(0, 0, 0);
 
 
-  bx = width/2.0; //center x coor
-  by = height/2.0; //center y coor
+  xWire= width/2.0; //center x coor
+  yWire = height/2.0; //center y coor
   rectMode(RADIUS);
   ellipseMode(RADIUS);
 }
@@ -58,36 +63,45 @@ float flux(float B, float area) {
   return B*area;
 }
 
+float areaInsideField(){
+  float xOverlap = (xField + fieldWidth) - (xWire - wireWidth);
+  float yOverlap = (yField + fieldLength) - (yWire - wireLength);
+  return xOverlap * yOverlap;
+}
 void drawWire() {
-  if (bx < xField + fieldWidth && bx > xField - fieldWidth && by < yField + fieldLength  && by >yField - fieldLength ) {
+  
+  /* //used to test basic inside/out functionality
+  if (xWire < xField + fieldWidth && xWire> xField - fieldWidth && yWire < yField + fieldLength  && yWire >yField - fieldLength ) {
     println("INSIDE FIELD");
   } else {
     println("not in field");
   }
+  */
+  
+  println("Area in field: " + areaInsideField());
 
-  // Test if the cursor is over the box 
-  if (mouseX > bx-boxSize && mouseX < bx+boxSize && mouseY > by-boxSize && mouseY < by+boxSize) {
-    overBox = true;
+  // Test if the cursor is over the wire 
+  if (mouseX > xWire-wireWidth && mouseX < xWire+wireWidth && mouseY > yWire-wireLength && mouseY < yWire+wireLength) {
+    overWire = true;
   } else {
-    overBox = false;
+    overWire = false;
   }
 
-  // Draw the wire in it's new position, represented by a box in a box
+  // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
-  rect(bx, by, boxSize, boxSize);
+  rect(xWire, yWire, wireWidth, wireLength);
   fill(0);
-  rect(bx, by, boxSize -10, boxSize -10);
+  rect(xWire, yWire, wireWidth -10, wireLength -10);
 
-  //useless code but dont remove 
-  //fill(0);
+
 }
 
 
 void drawField() {
   fill(255);
+  
   //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
-
-
+  
   //nested for loops to make dotted pattern
   for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
     for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
@@ -103,6 +117,7 @@ void drawField() {
     }
   }
 }
+
 void draw() { 
   background(0);
   drawField();
@@ -111,7 +126,7 @@ void draw() {
 
 
 void mousePressed() {
-  if (overBox) { 
+  if (overWire) { 
     locked = true;
   } else {
     locked = false;
@@ -121,10 +136,10 @@ void mousePressed() {
 
 void mouseDragged() {
   if (locked) {
-    bx = mouseX; 
-    by = mouseY;
+    xWire= mouseX; 
+    yWire = mouseY;
     //test coordinate change functionality
-    println(bx,by);
+    //println(xWire,yWire);
   }
 }
 
