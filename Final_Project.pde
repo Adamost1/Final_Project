@@ -3,13 +3,15 @@ boolean hasClicked = false;
 //=============== FIELD VARIABLES ===========================
 
 //Magnetic field coordinates (stays the same)
-float xField = 500; //x coor of center of field
+float xField = 200; //x coor of center of field
 //float xEnd = xField + 300; 
-float yField = 800; //y coor of center of field
+float yField = 320; //y coor of center of field
 //float yEnd = yField +300;
-float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
-float fieldLength = 600; //half of length of field
-
+float fieldWidth = 120; //half of width of field (to be implemented with RectMode(RADIUS) later on)
+float fieldLength = 240; //half of length of field
+float fluxInitial;
+float fluxFinal;
+float dFlux;
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
@@ -28,8 +30,8 @@ float timeEnd;
 //=================WIRE VARIABLES=============================
 float xWire;
 float yWire;
-float wireLength = 100;
-float wireWidth = 100;
+float wireLength = 40;
+float wireWidth = 40;
 
 boolean overWire = false;
 boolean locked = false;
@@ -43,7 +45,7 @@ PFont f;
 
 //runs once and sets up screen size and color
 void setup() {
-  size(2000, 1500);
+  size(800, 600);
   background(0, 0, 0);
 
 
@@ -63,7 +65,7 @@ float flux(float B, float area) {
 
 float emf(){
  
-  return loops;
+  return loops * (dFlux / timeEnd) * 1000; //since timeEnd is in milliseconds, we need to multiply by 1000 to get the true emf induced
 }
 
 float areaInsideField() {
@@ -126,10 +128,10 @@ void drawWire() {
 
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
-  rect(xWire -  wireWidth, yWire , 10, wireLength + 5);
-  rect(xWire +  wireWidth, yWire, 10, wireLength + 5);
-  rect(xWire, yWire - wireLength, wireWidth + 5  ,10);
-  rect(xWire, yWire + wireLength, wireWidth + 5, 10);
+  rect(xWire -  wireWidth, yWire , 4, wireLength + 2);
+  rect(xWire +  wireWidth, yWire, 4, wireLength + 2);
+  rect(xWire, yWire - wireLength, wireWidth + 2, 4);
+  rect(xWire, yWire + wireLength, wireWidth + 2, 4);
   
   /*//OLD wire implementation
   fill(0);
@@ -145,8 +147,8 @@ void drawField() {
   //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
 
   //nested for loops to make dotted pattern
-  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
-    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
+  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+4) {
+    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+4) {
 
       //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
@@ -155,7 +157,7 @@ void drawField() {
         fill(0, 255, 0);
       }
 
-      ellipse(i, j, 3, 3);
+      ellipse(i, j, 1.2, 1.2);
     }
   }
 }
@@ -168,15 +170,16 @@ void draw() {
 
   drawField();
   drawWire();
-
-  textSize(100);
+  textSize(40);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nTime Elapsed: " + timeEnd, 700, 500);
+  int n = millis();
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nEMF: " + emf() + "\nTime Elapsed: " + n, 70, 50);
   
 }
 
 
 void mousePressed() {
+  fluxInitial = flux(bField, areaInsideField());
   timeStart = millis();
   if (overWire) { 
     locked = true;
@@ -196,6 +199,8 @@ void mouseDragged() {
 }
 
 void mouseReleased() {
+  fluxFinal = flux(bField, areaInsideField());
+  dFlux = fluxFinal - fluxInitial;
   locked = false;
   timeEnd = millis();
 }
