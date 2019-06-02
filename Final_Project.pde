@@ -3,17 +3,18 @@ boolean hasClicked = false;
 //=============== FIELD VARIABLES ===========================
 
 //Magnetic field coordinates (stays the same)
-float xField = 200; //x coor of center of field
+float xField = 500; //x coor of center of field
 //float xEnd = xField + 300; 
-float yField = 320; //y coor of center of field
+float yField = 800; //y coor of center of field
 //float yEnd = yField +300;
-float fieldWidth = 120; //half of width of field (to be implemented with RectMode(RADIUS) later on)
-float fieldLength = 240; //half of length of field
-float fluxInitial;
-float fluxFinal;
-float dFlux;
+float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
+float fieldLength = 600; //half of length of field
+
+
+
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
+
 
 
 //Formula Variables
@@ -26,18 +27,19 @@ float bField = 10; //to be changeable
 float loops = 1;
 float timeStart;
 float timeEnd;
+float dTime = 0;
 
 //=================WIRE VARIABLES=============================
 float xWire;
 float yWire;
-float wireLength = 40;
-float wireWidth = 40;
+float wireLength = 100;
+float wireWidth = 100;
 
 boolean overWire = false;
-boolean locked = false;
+boolean locked = false; //Is the wire being moved by the cursor?
 
+boolean isInField = false; //is any part of the wire in the field?
 PFont f;
-
 
 
 //https://processing.org/examples/mousefunctions.html
@@ -45,7 +47,7 @@ PFont f;
 
 //runs once and sets up screen size and color
 void setup() {
-  size(800, 600);
+  size(2000, 1500);
   background(0, 0, 0);
 
 
@@ -63,21 +65,25 @@ float flux(float B, float area) {
   return B*area;
 }
 
-float emf(){
- 
-  return loops * (dFlux / timeEnd) * 1000; //since timeEnd is in milliseconds, we need to multiply by 1000 to get the true emf induced
+
+
+float emf( float dFlux, float dT) {
+  
+  return dFlux / dT;
 }
 
 float areaInsideField() {
+  
   float leftField = xField - fieldWidth; //left edge of field
-  float rightField = xField + fieldWidth; //right edge of field
-  float upperField = yField - fieldLength; //upper edge of field
-  float lowerField = yField + fieldLength; //lower edge of field
-
-  float leftWire = xWire - wireWidth; //left edge of wire
-  float rightWire = xWire + wireWidth; //right edge of wire
-  float upperWire = yWire - wireLength; //upper edge of wire
-  float lowerWire = yWire + wireLength; //lower edge of wire
+   float rightField = xField + fieldWidth; //right edge of field
+   float upperField = yField - fieldLength; //upper edge of field
+   float lowerField = yField + fieldLength; //lower edge of field
+   
+   float leftWire = xWire - wireWidth; //left edge of wire
+   float rightWire = xWire + wireWidth; //right edge of wire
+   float upperWire = yWire - wireLength; //upper edge of wire
+   float lowerWire = yWire + wireLength; //lower edge of wire
+   
 
   float xOverlap;
   float yOverlap;
@@ -107,6 +113,15 @@ float areaInsideField() {
   }
 }
 
+boolean isInField() {
+  if (areaInsideField() == 0 ) {
+    println("False");// return true;
+  } else {
+    println("True");//return false;
+  }  
+  return false;
+}
+
 void drawWire() {
 
   /* //used to test basic inside/out functionality
@@ -117,7 +132,6 @@ void drawWire() {
    }
    */
 
-  println("Area in field: " + areaInsideField());
 
   // Test if the cursor is over the wire 
   if (mouseX > xWire-wireWidth && mouseX < xWire+wireWidth && mouseY > yWire-wireLength && mouseY < yWire+wireLength) {
@@ -128,16 +142,15 @@ void drawWire() {
 
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
-  rect(xWire -  wireWidth, yWire , 4, wireLength + 2);
-  rect(xWire +  wireWidth, yWire, 4, wireLength + 2);
-  rect(xWire, yWire - wireLength, wireWidth + 2, 4);
-  rect(xWire, yWire + wireLength, wireWidth + 2, 4);
-  
+  rect(xWire -  wireWidth, yWire, 10, wireLength + 5);
+  rect(xWire +  wireWidth, yWire, 10, wireLength + 5);
+  rect(xWire, yWire - wireLength, wireWidth + 5, 10);
+  rect(xWire, yWire + wireLength, wireWidth + 5, 10);
+
   /*//OLD wire implementation
-  fill(0);
-  rect(xWire, yWire, wireWidth -10, wireLength -10);
-  */
-  
+   fill(0);
+   rect(xWire, yWire, wireWidth -10, wireLength -10);
+   */
 }
 
 
@@ -147,8 +160,8 @@ void drawField() {
   //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
 
   //nested for loops to make dotted pattern
-  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+4) {
-    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+4) {
+  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
+    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
 
       //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
@@ -157,30 +170,51 @@ void drawField() {
         fill(0, 255, 0);
       }
 
-      ellipse(i, j, 1.2, 1.2);
+      ellipse(i, j, 3, 3);
     }
   }
 }
 
 void draw() { 
 
-  int m = millis();
+  if (areaInsideField() == 0) {
+    timeStart = millis();
+  }
+  else{
+   timeEnd = millis(); 
+  }
+
+float timeElapsed;
+
+  if(timeEnd - timeStart <= 0){
+    timeElapsed = 0;
+  }
+  else{
+  timeElapsed = timeEnd - timeStart;
+  }
+  
+  /*
+  if ((timeEnd-timeStart) < 0) {
+    dTime = 0;
+  } else {
+    dTime = timeEnd - timeStart;
+  }
+*/
 
   background(0);
 
   drawField();
   drawWire();
-  textSize(40);
+
+  textSize(100);
   fill(255);
-  int n = millis();
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nEMF: " + emf() + "\nTime Elapsed: " + n, 70, 50);
-  
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: " + "\nChange in Time: " + timeElapsed + "\nInduced EMF: ", 700, 500);
+  isInField();
 }
 
 
 void mousePressed() {
-  fluxInitial = flux(bField, areaInsideField());
-  timeStart = millis();
+  //timeStart = millis();
   if (overWire) { 
     locked = true;
   } else {
@@ -199,15 +233,11 @@ void mouseDragged() {
 }
 
 void mouseReleased() {
-  fluxFinal = flux(bField, areaInsideField());
-  dFlux = fluxFinal - fluxInitial;
   locked = false;
-  timeEnd = millis();
 }
 
 
 //after a mouse click, it updates variables
 void mouseClicked() {
   hasClicked = !hasClicked;
-  
 }
