@@ -10,9 +10,6 @@ float yField = 800; //y coor of center of field
 float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
 float fieldLength = 600; //half of length of field
 
-
-
-
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
 
@@ -46,6 +43,9 @@ float fluxInitial;
 float fluxFinal;
 float dFlux;
 
+
+
+HScrollbar hs1;
 //https://processing.org/examples/mousefunctions.html
 
 
@@ -63,15 +63,9 @@ void setup() {
 }
 
 
-
-
 float flux(float B, float area) {
   return B*area;
 }
-
-
-
-
 
 float areaInsideField() {
   
@@ -177,7 +171,6 @@ void drawField() {
     }
   }
 }
-
 void draw() { 
 
   if (areaInsideField() == 0) {
@@ -187,14 +180,26 @@ void draw() {
    timeEnd = millis(); 
   }
 
-float timeElapsed;
+  float timeElapsed;
+  
+  /*
+  if (mousePressed){
+    fluxFinal = flux(bField, areaInsideField());
+    println(fluxInitial);
+    println(fluxFinal);
+    dFlux = fluxFinal - fluxInitial;
+  }
+  
+  */
+  
 
-  if(timeEnd - timeStart <= 0){
+  if (timeEnd - timeStart <= 0){
     timeElapsed = 0;
   }
   else{
-  timeElapsed = timeEnd - timeStart;
+    timeElapsed = timeEnd - timeStart;
   }
+  
   
   /*
   if ((timeEnd-timeStart) < 0) {
@@ -213,11 +218,11 @@ float timeElapsed;
   
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + (-1 * loops * (dFlux / timeElapsed)), 700, 500);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + -1 * loops * (dFlux/timeElapsed) , 700, 500);
 
 }
-
-
+boolean moving = false;
+    
 void mousePressed() {
   if (overWire) { 
     locked = true;
@@ -227,13 +232,13 @@ void mousePressed() {
 }
 
 
+//updates when mouse pressed and moving
 void mouseDragged() {
     fluxInitial = flux(bField, areaInsideField());
-    xWire= mouseX; 
+    xWire = mouseX; 
     yWire = mouseY;
     fluxFinal = flux(bField, areaInsideField());
     dFlux = fluxFinal - fluxInitial;
-    println(dFlux);
     //test coordinate change functionality
     //println(xWire,yWire);
   
@@ -241,6 +246,7 @@ void mouseDragged() {
 
 void mouseReleased() {
   //dFlux = fluxFinal - fluxInitial;
+  dFlux = 0;
   locked = false;
 }
 
@@ -248,4 +254,83 @@ void mouseReleased() {
 //after a mouse click, it updates variables
 void mouseClicked() {
   hasClicked = !hasClicked;
+}
+
+
+
+
+class HScrollbar {
+  int swidth, sheight;    // width and height of bar
+  float xpos, ypos;       // x and y position of bar
+  float spos, newspos;    // x position of slider
+  float sposMin, sposMax; // max and min values of slider
+  int loose;              // how loose/heavy
+  boolean over;           // is the mouse over the slider?
+  boolean locked;
+  float ratio;
+
+  HScrollbar (float xp, float yp, int sw, int sh, int l) {
+    swidth = sw;
+    sheight = sh;
+    int widthtoheight = sw - sh;
+    ratio = (float)sw / (float)widthtoheight;
+    xpos = xp;
+    ypos = yp-sheight/2;
+    spos = xpos + swidth/2 - sheight/2;
+    newspos = spos;
+    sposMin = xpos;
+    sposMax = xpos + swidth - sheight;
+    loose = l;
+  }
+
+  void update() {
+    if (overEvent()) {
+      over = true;
+    } else {
+      over = false;
+    }
+    if (mousePressed && over) {
+      locked = true;
+    }
+    if (!mousePressed) {
+      locked = false;
+    }
+    if (locked) {
+      newspos = constrain(mouseX-sheight/2, sposMin, sposMax);
+    }
+    if (abs(newspos - spos) > 1) {
+      spos = spos + (newspos-spos)/loose;
+    }
+  }
+
+  float constrain(float val, float minv, float maxv) {
+    return min(max(val, minv), maxv);
+  }
+
+  boolean overEvent() {
+    if (mouseX > xpos && mouseX < xpos+swidth &&
+       mouseY > ypos && mouseY < ypos+sheight) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void display() {
+    noStroke();
+    fill(204);
+    rect(xpos, ypos, swidth, sheight);
+    if (over || locked) {
+      fill(0, 0, 0);
+    } else {
+      fill(102, 102, 102);
+    }
+    rect(spos, ypos, sheight, sheight);
+  }
+
+  float getPos() {
+    // Convert spos to be values between
+    // 0 and the total width of the scrollbar
+    return spos * ratio;
+  }
 }
