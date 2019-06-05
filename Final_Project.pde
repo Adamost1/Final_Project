@@ -20,7 +20,7 @@ boolean isFieldIn = true; //true if the field is into page, false if field is ou
 //Formula Variables
 float theta = 90; //change if we want to implement rotate
 //B and A can be used to calculate dFlux
-float area = 10;
+
 
 float bField = 10; //to be changeable
 
@@ -62,7 +62,7 @@ void setup() {
   f = createFont("Arial", 16);
 }
 
-//emf=-N(dFlux/dTime)
+
 
 
 float flux(float B, float area) {
@@ -71,10 +71,7 @@ float flux(float B, float area) {
 
 
 
-float emf( float dFlux, float dT) {
-  
-  return dFlux / dT;
-}
+
 
 float areaInsideField() {
   
@@ -116,8 +113,9 @@ float areaInsideField() {
     return returnVal;
   }
 }
-
+/* Not used
 boolean isInField() {
+  
   if (areaInsideField() == 0 ) {
     println("False");// return true;
   } else {
@@ -125,6 +123,7 @@ boolean isInField() {
   }  
   return false;
 }
+*/
 
 void drawWire() {
 
@@ -215,12 +214,11 @@ float timeElapsed;
   textSize(100);
   fill(255);
   text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + (-1 * loops * (dFlux / timeElapsed)), 700, 500);
-  isInField();
+
 }
 
 
 void mousePressed() {
-  fluxInitial = flux(bField, areaInsideField());
   if (overWire) { 
     locked = true;
   } else {
@@ -230,15 +228,15 @@ void mousePressed() {
 
 
 void mouseDragged() {
-  if (locked) {
+    fluxInitial = flux(bField, areaInsideField());
     xWire= mouseX; 
     yWire = mouseY;
-    
     fluxFinal = flux(bField, areaInsideField());
     dFlux = fluxFinal - fluxInitial;
+    println(dFlux);
     //test coordinate change functionality
     //println(xWire,yWire);
-  }
+  
 }
 
 void mouseReleased() {
