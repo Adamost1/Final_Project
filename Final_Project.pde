@@ -42,6 +42,10 @@ boolean isInField = false; //is any part of the wire in the field?
 PFont f;
 
 
+float fluxInitial;
+float fluxFinal;
+float dFlux;
+
 //https://processing.org/examples/mousefunctions.html
 
 
@@ -205,16 +209,18 @@ float timeElapsed;
 
   drawField();
   drawWire();
+  
 
+  
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: " + "\nChange in Time: " + timeElapsed + "\nInduced EMF: ", 700, 500);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + (-1 * loops * (dFlux / timeElapsed)), 700, 500);
   isInField();
 }
 
 
 void mousePressed() {
-  //timeStart = millis();
+  fluxInitial = flux(bField, areaInsideField());
   if (overWire) { 
     locked = true;
   } else {
@@ -227,12 +233,16 @@ void mouseDragged() {
   if (locked) {
     xWire= mouseX; 
     yWire = mouseY;
+    
+    fluxFinal = flux(bField, areaInsideField());
+    dFlux = fluxFinal - fluxInitial;
     //test coordinate change functionality
     //println(xWire,yWire);
   }
 }
 
 void mouseReleased() {
+  //dFlux = fluxFinal - fluxInitial;
   locked = false;
 }
 
