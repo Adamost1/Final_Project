@@ -1,9 +1,10 @@
 boolean hasClicked = false;
 
-//=============== FIELD VARIABLES ===========================
-//each frame is 1/60 of a second
 
-//Magnetic field coordinates (stays the same)
+//IMPORTANT NOTE: Since each frame is 1/60th of a second, it is not necessary to calculate timeElapsed, as dFlux can be calculated per frame
+
+//=============== FIELD VARIABLES ===========================
+//Magnetic field coordinates stay the same
 float xField = 500; //x coor of center of field
 //float xEnd = xField + 300; 
 float yField = 800; //y coor of center of field
@@ -13,11 +14,8 @@ float fieldLength = 600; //half of length of field
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
-float timeStart;
-float timeEnd;
 
-//Formula Variables
-float theta = 90; //change if we want to implement rotate
+
 //B and A can be used to calculate dFlux
 
 
@@ -32,22 +30,24 @@ float yWire;
 float wireLength = 100;
 float wireWidth = 100;
 
+//Probably not gonna implement rotate
+//float theta = 90; //change if we want to implement rotate
+
 boolean overWire = false;
 boolean locked = false; //Is the wire being moved by the cursor?
 
-boolean isInField = false; //is any part of the wire in the field?
-PFont f;
 
 
+//====================FORMULA VARIABLES=========================
 float fluxInitial;
 float fluxFinal;
 float dFlux;
 
-float currentX;
-float currentY;
-
+//initialize initialArea to calculate dArea and dFlux later on
 float initialArea = 0;
 
+boolean isInField = false; //is any part of the wire in the field?
+PFont f;
 
 //https://processing.org/examples/mousefunctions.html
 
@@ -71,17 +71,15 @@ float flux(float B, float area) {
 }
 
 float areaInsideField() {
-  
+
   float leftField = xField - fieldWidth; //left edge of field
-   float rightField = xField + fieldWidth; //right edge of field
-   float upperField = yField - fieldLength; //upper edge of field
-   float lowerField = yField + fieldLength; //lower edge of field
-   
-   float leftWire = xWire - wireWidth; //left edge of wire
-   float rightWire = xWire + wireWidth; //right edge of wire
-   float upperWire = yWire - wireLength; //upper edge of wire
-   float lowerWire = yWire + wireLength; //lower edge of wire
-   
+  float rightField = xField + fieldWidth; //right edge of field
+  float upperField = yField - fieldLength; //upper edge of field
+  float lowerField = yField + fieldLength; //lower edge of field
+  float leftWire = xWire - wireWidth; //left edge of wire
+  float rightWire = xWire + wireWidth; //right edge of wire
+  float upperWire = yWire - wireLength; //upper edge of wire
+  float lowerWire = yWire + wireLength; //lower edge of wire
 
   float xOverlap;
   float yOverlap;
@@ -113,7 +111,6 @@ float areaInsideField() {
 
 
 void drawWire() {
-
   /* //used to test basic inside/out functionality
    if (xWire < xField + fieldWidth && xWire> xField - fieldWidth && yWire < yField + fieldLength  && yWire >yField - fieldLength ) {
    println("INSIDE FIELD");
@@ -121,7 +118,6 @@ void drawWire() {
    println("not in field");
    }
    */
-
 
   // Test if the cursor is over the wire 
   if (mouseX > xWire-wireWidth && mouseX < xWire+wireWidth && mouseY > yWire-wireLength && mouseY < yWire+wireLength) {
@@ -147,7 +143,7 @@ void drawWire() {
 void drawField() {
   fill(255);
 
- // rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
+  // rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
 
 
   //nested for loops to make dotted pattern
@@ -161,58 +157,31 @@ void drawField() {
         fill(0, 255, 0);
       }
 
-      ellipse(i, j, 3, 3);
+      ellipse(i, j, 6, 6);
     }
   }
-  
 }
 void draw() { 
-/* dTime functionality not used
-  if (areaInsideField() == 0) {
-    timeStart = millis();
-  }
-  else{
-     timeEnd = millis(); 
-  }
-
-  float timeElapsed;
-  
-
-  if (timeEnd - timeStart <= 0){
-    timeElapsed = 0;
-  }
-  else{
-    timeElapsed = timeEnd - timeStart;
-  }
-  
-  if ((timeEnd-timeStart) < 0) {
-    dTime = 0;
-  } else {
-    dTime = timeEnd - timeStart;
-  }
-*/
-
   background(0);
 
   drawField();
   drawWire();
-  
+
   //calculate dFlux per frame (draw runs once every frame)
   dFlux = bField * (areaInsideField() - initialArea);
   println(initialArea + " " + areaInsideField());
-  
+
   initialArea = areaInsideField();
-  
+
   float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
-  
-  
+
+
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF , 350, 250);
-
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 350, 250);
 }
 boolean moving = false;
-    
+
 void mousePressed() {
   if (overWire) { 
     locked = true;
@@ -224,25 +193,16 @@ void mousePressed() {
 
 //updates when mouse pressed and moving
 void mouseDragged() {
-  /*
-    timeStart = millis();
-    timeEnd = millis();
-        currentX = mouseX;
-    currentY = mouseY;
-  */
-    xWire = mouseX; 
-    yWire = mouseY;
-    
-    
-    //test coordinate change functionality
-    //println(xWire,yWire);
 
-  
+  xWire = mouseX; 
+  yWire = mouseY;
+
+
+  //test coordinate change functionality
+  //println(xWire,yWire);
 }
 
 void mouseReleased() {
-  //dFlux = fluxFinal - fluxInitial;
-  timeStart = millis();
   dFlux = 0;
   locked = false;
 }
