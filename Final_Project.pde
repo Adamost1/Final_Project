@@ -12,7 +12,8 @@ float fieldLength = 600; //half of length of field
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
-
+float timeStart;
+float timeEnd;
 
 //Formula Variables
 float theta = 90; //change if we want to implement rotate
@@ -22,8 +23,6 @@ float theta = 90; //change if we want to implement rotate
 float bField = 10; //to be changeable
 
 float loops = 1;
-float timeStart;
-float timeEnd;
 float dTime = 0;
 
 //=================WIRE VARIABLES=============================
@@ -45,7 +44,6 @@ float dFlux;
 
 
 
-HScrollbar hs1;
 //https://processing.org/examples/mousefunctions.html
 
 
@@ -177,11 +175,10 @@ void draw() {
     timeStart = millis();
   }
   else{
-   timeEnd = millis(); 
+     timeEnd = millis(); 
   }
 
   float timeElapsed;
-  
   /*
   if (mousePressed){
     fluxFinal = flux(bField, areaInsideField());
@@ -199,7 +196,7 @@ void draw() {
   else{
     timeElapsed = timeEnd - timeStart;
   }
-  
+  println(timeElapsed);
   
   /*
   if ((timeEnd-timeStart) < 0) {
@@ -218,7 +215,7 @@ void draw() {
   
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + -1 * loops * (dFlux/timeElapsed) , 700, 500);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + -1 * loops * (dFlux/timeElapsed) , 350, 250);
 
 }
 boolean moving = false;
@@ -234,6 +231,9 @@ void mousePressed() {
 
 //updates when mouse pressed and moving
 void mouseDragged() {
+    println("lol");
+    timeStart = millis();
+    timeEnd = millis();
     fluxInitial = flux(bField, areaInsideField());
     xWire = mouseX; 
     yWire = mouseY;
@@ -246,6 +246,7 @@ void mouseDragged() {
 
 void mouseReleased() {
   //dFlux = fluxFinal - fluxInitial;
+  timeStart = millis();
   dFlux = 0;
   locked = false;
 }
@@ -254,83 +255,4 @@ void mouseReleased() {
 //after a mouse click, it updates variables
 void mouseClicked() {
   hasClicked = !hasClicked;
-}
-
-
-
-
-class HScrollbar {
-  int swidth, sheight;    // width and height of bar
-  float xpos, ypos;       // x and y position of bar
-  float spos, newspos;    // x position of slider
-  float sposMin, sposMax; // max and min values of slider
-  int loose;              // how loose/heavy
-  boolean over;           // is the mouse over the slider?
-  boolean locked;
-  float ratio;
-
-  HScrollbar (float xp, float yp, int sw, int sh, int l) {
-    swidth = sw;
-    sheight = sh;
-    int widthtoheight = sw - sh;
-    ratio = (float)sw / (float)widthtoheight;
-    xpos = xp;
-    ypos = yp-sheight/2;
-    spos = xpos + swidth/2 - sheight/2;
-    newspos = spos;
-    sposMin = xpos;
-    sposMax = xpos + swidth - sheight;
-    loose = l;
-  }
-
-  void update() {
-    if (overEvent()) {
-      over = true;
-    } else {
-      over = false;
-    }
-    if (mousePressed && over) {
-      locked = true;
-    }
-    if (!mousePressed) {
-      locked = false;
-    }
-    if (locked) {
-      newspos = constrain(mouseX-sheight/2, sposMin, sposMax);
-    }
-    if (abs(newspos - spos) > 1) {
-      spos = spos + (newspos-spos)/loose;
-    }
-  }
-
-  float constrain(float val, float minv, float maxv) {
-    return min(max(val, minv), maxv);
-  }
-
-  boolean overEvent() {
-    if (mouseX > xpos && mouseX < xpos+swidth &&
-       mouseY > ypos && mouseY < ypos+sheight) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void display() {
-    noStroke();
-    fill(204);
-    rect(xpos, ypos, swidth, sheight);
-    if (over || locked) {
-      fill(0, 0, 0);
-    } else {
-      fill(102, 102, 102);
-    }
-    rect(spos, ypos, sheight, sheight);
-  }
-
-  float getPos() {
-    // Convert spos to be values between
-    // 0 and the total width of the scrollbar
-    return spos * ratio;
-  }
 }
