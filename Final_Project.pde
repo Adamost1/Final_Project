@@ -1,6 +1,7 @@
 boolean hasClicked = false;
 
 //=============== FIELD VARIABLES ===========================
+//each frame is 1/60 of a second
 
 //Magnetic field coordinates (stays the same)
 float xField = 500; //x coor of center of field
@@ -214,16 +215,19 @@ void draw() {
   drawField();
   drawWire();
   
-  float EMF = -1 * loops * (dFlux/timeElapsed);
+  float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
   
-  if(abs(mouseX - currentX) <=10 || abs(mouseY - currentY) <= 10){
+  //if the cursor doesn't move , then the flux is 0
+  
+    if(mouseX == currentX && mouseY == currentY){
     println( mouseX + " " + currentX);
     dFlux = 0;
   }
   
+  
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + EMF , 350, 250);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF , 350, 250);
 
 }
 boolean moving = false;
@@ -244,8 +248,10 @@ void mouseDragged() {
     fluxInitial = flux(bField, areaInsideField());
     xWire = mouseX; 
     yWire = mouseY;
+    
     fluxFinal = flux(bField, areaInsideField());
     dFlux = fluxFinal - fluxInitial;
+    
     //test coordinate change functionality
     //println(xWire,yWire);
     currentX = mouseX;
