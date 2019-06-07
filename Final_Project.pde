@@ -52,12 +52,9 @@ PFont f;
 //https://processing.org/examples/mousefunctions.html
 
 
-//runs once and sets up screen size and color
 void setup() {
   size(2000, 1500);
   background(0, 0, 0);
-
-
   xWire= width/2.0; //center x coor
   yWire = height/2.0; //center y coor
   rectMode(RADIUS);
@@ -65,13 +62,11 @@ void setup() {
   f = createFont("Arial", 16);
 }
 
-
 float flux(float B, float area) {
   return B*area;
 }
 
 float areaInsideField() {
-
   float leftField = xField - fieldWidth; //left edge of field
   float rightField = xField + fieldWidth; //right edge of field
   float upperField = yField - fieldLength; //upper edge of field
@@ -80,7 +75,6 @@ float areaInsideField() {
   float rightWire = xWire + wireWidth; //right edge of wire
   float upperWire = yWire - wireLength; //upper edge of wire
   float lowerWire = yWire + wireLength; //lower edge of wire
-
   float xOverlap;
   float yOverlap;
 
@@ -108,7 +102,6 @@ float areaInsideField() {
     return returnVal;
   }
 }
-
 
 void drawWire() {
   /* //used to test basic inside/out functionality
@@ -139,48 +132,42 @@ void drawWire() {
    */
 }
 
-
 void drawField() {
   fill(255);
-
-  // rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
-
+  //test field size with a rectangle
+  // rect(xField, yField, fieldWidth, fieldLength);
 
   //nested for loops to make dotted pattern
   for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+50) {
     for (float j = yField-fieldLength; j < yField + fieldLength; j = j+50) {
-
       //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
         fill(255, 0, 0);
       } else {
         fill(0, 255, 0);
       }
-
       ellipse(i, j, 6, 6);
     }
   }
 }
+
 void draw() { 
   background(0);
-
   drawField();
   drawWire();
 
   //calculate dFlux per frame (draw runs once every frame)
   dFlux = bField * (areaInsideField() - initialArea);
   println(initialArea + " " + areaInsideField());
-
   initialArea = areaInsideField();
 
   float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
-
 
   textSize(100);
   fill(255);
   text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 350, 250);
 }
-boolean moving = false;
+
 
 void mousePressed() {
   if (overWire) { 
@@ -193,11 +180,8 @@ void mousePressed() {
 
 //updates when mouse pressed and moving
 void mouseDragged() {
-
   xWire = mouseX; 
   yWire = mouseY;
-
-
   //test coordinate change functionality
   //println(xWire,yWire);
 }
