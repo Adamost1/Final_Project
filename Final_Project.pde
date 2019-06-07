@@ -42,6 +42,9 @@ float fluxInitial;
 float fluxFinal;
 float dFlux;
 
+float currentX;
+float currentY;
+
 
 
 //https://processing.org/examples/mousefunctions.html
@@ -152,8 +155,9 @@ void drawWire() {
 void drawField() {
   fill(255);
 
-  //rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
+  rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
 
+/*
   //nested for loops to make dotted pattern
   for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
     for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
@@ -168,6 +172,7 @@ void drawField() {
       ellipse(i, j, 3, 3);
     }
   }
+  */
 }
 void draw() { 
 
@@ -186,7 +191,6 @@ void draw() {
     println(fluxFinal);
     dFlux = fluxFinal - fluxInitial;
   }
-  
   */
   
 
@@ -196,7 +200,6 @@ void draw() {
   else{
     timeElapsed = timeEnd - timeStart;
   }
-  println(timeElapsed);
   
   /*
   if ((timeEnd-timeStart) < 0) {
@@ -211,11 +214,16 @@ void draw() {
   drawField();
   drawWire();
   
-
+  float EMF = -1 * loops * (dFlux/timeElapsed);
+  
+  if(abs(mouseX - currentX) <=10 || abs(mouseY - currentY) <= 10){
+    println( mouseX + " " + currentX);
+    dFlux = 0;
+  }
   
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + -1 * loops * (dFlux/timeElapsed) , 350, 250);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux +  "\nChange in Time: " + timeElapsed + "\nInduced EMF: " + EMF , 350, 250);
 
 }
 boolean moving = false;
@@ -231,7 +239,6 @@ void mousePressed() {
 
 //updates when mouse pressed and moving
 void mouseDragged() {
-    println("lol");
     timeStart = millis();
     timeEnd = millis();
     fluxInitial = flux(bField, areaInsideField());
@@ -241,6 +248,8 @@ void mouseDragged() {
     dFlux = fluxFinal - fluxInitial;
     //test coordinate change functionality
     //println(xWire,yWire);
+    currentX = mouseX;
+    currentY = mouseY;
   
 }
 
