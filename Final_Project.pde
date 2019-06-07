@@ -46,6 +46,7 @@ float dFlux;
 float currentX;
 float currentY;
 
+float initialArea = 0;
 
 
 //https://processing.org/examples/mousefunctions.html
@@ -109,17 +110,7 @@ float areaInsideField() {
     return returnVal;
   }
 }
-/* Not used
-boolean isInField() {
-  
-  if (areaInsideField() == 0 ) {
-    println("False");// return true;
-  } else {
-    println("True");//return false;
-  }  
-  return false;
-}
-*/
+
 
 void drawWire() {
 
@@ -156,12 +147,12 @@ void drawWire() {
 void drawField() {
   fill(255);
 
-  rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
+ // rect(xField, yField, fieldWidth, fieldLength); //test field with rectangle shape
 
-/*
+
   //nested for loops to make dotted pattern
-  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+10) {
-    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+10) {
+  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+50) {
+    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+50) {
 
       //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
@@ -173,10 +164,10 @@ void drawField() {
       ellipse(i, j, 3, 3);
     }
   }
-  */
+  
 }
 void draw() { 
-
+/* dTime functionality not used
   if (areaInsideField() == 0) {
     timeStart = millis();
   }
@@ -185,14 +176,6 @@ void draw() {
   }
 
   float timeElapsed;
-  /*
-  if (mousePressed){
-    fluxFinal = flux(bField, areaInsideField());
-    println(fluxInitial);
-    println(fluxFinal);
-    dFlux = fluxFinal - fluxInitial;
-  }
-  */
   
 
   if (timeEnd - timeStart <= 0){
@@ -202,7 +185,6 @@ void draw() {
     timeElapsed = timeEnd - timeStart;
   }
   
-  /*
   if ((timeEnd-timeStart) < 0) {
     dTime = 0;
   } else {
@@ -215,14 +197,13 @@ void draw() {
   drawField();
   drawWire();
   
+  //calculate dFlux per frame (draw runs once every frame)
+  dFlux = bField * (areaInsideField() - initialArea);
+  println(initialArea + " " + areaInsideField());
+  
+  initialArea = areaInsideField();
+  
   float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
-  
-  //if the cursor doesn't move , then the flux is 0
-  
-    if(mouseX == currentX && mouseY == currentY){
-    println( mouseX + " " + currentX);
-    dFlux = 0;
-  }
   
   
   textSize(100);
@@ -243,19 +224,19 @@ void mousePressed() {
 
 //updates when mouse pressed and moving
 void mouseDragged() {
+  /*
     timeStart = millis();
     timeEnd = millis();
-    fluxInitial = flux(bField, areaInsideField());
+        currentX = mouseX;
+    currentY = mouseY;
+  */
     xWire = mouseX; 
     yWire = mouseY;
     
-    fluxFinal = flux(bField, areaInsideField());
-    dFlux = fluxFinal - fluxInitial;
     
     //test coordinate change functionality
     //println(xWire,yWire);
-    currentX = mouseX;
-    currentY = mouseY;
+
   
 }
 
