@@ -156,30 +156,27 @@ void keyPressed() {
   println(typing);
   // If the return key is pressed, save the String and clear it
   if (key == '\n' ) {
-      saved = float(typing);
-      if (!(saved >= 10 || saved < 10)){
-        println("lmao good one!");
+    saved = float(typing);
+    if (!(saved >= 10 || saved < 10)) {
+      println("lmao good one!");
+    } else {
+      if (counter == 0) {
+        bField = saved;
       }
-      else{
-        if (counter == 0){
-          bField = saved;
-        }
-        if (counter == 1){
-          wireLength = saved / 2.0;
-        }
-        if (counter == 2){
-          wireWidth = saved / 2.0;
-        }
-        counter += 1;
+      if (counter == 1) {
+        wireLength = saved / 2.0;
       }
-      // A String can be cleared by setting it equal to ""
-      typing = "";
-      saved = 0;
+      if (counter == 2) {
+        wireWidth = saved / 2.0;
+      }
+      counter += 1;
     }
-  else if (key == BACKSPACE){
+    // A String can be cleared by setting it equal to ""
     typing = "";
-  }
-  else{
+    saved = 0;
+  } else if (key == BACKSPACE) {
+    typing = "";
+  } else {
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
     typing = typing + key;
@@ -190,36 +187,56 @@ void draw() {
   text("Type in the magnetic field!", 400, 550);
   text("Input: " + typing, 400, 625);
   text("Saved text: " + saved, 400, 700);
-  if (bField != 0){
+  if (bField != 0) {
     background(0);
     text("Great, now type in the length of the wire!", 400, 550);
     text("length: " + typing, 400, 625);
     text("Saved text: " + saved, 400, 700);
-    if (wireLength != 0){
+    if (wireLength != 0) {
       background(0);
       text("Great, now type in the width of the wire!", 400, 550);
       text("width: " + typing, 400, 625);
       text("Saved text: " + saved, 400, 700);
-      if (wireWidth != 0){
+      if (wireWidth != 0) {
         background(0);
         text("Great, now we can test everything out!", 400, 500);
       }
     }
   }
+  drawButton();
   drawField();
   drawWire();
 
   //calculate dFlux per frame (draw runs once every frame)
   dFlux = bField * (areaInsideField() - initialArea);
   initialArea = areaInsideField();
+  float EMF = 0;
 
-  float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
+  //flux for fieldIn should be negative
+  //flux for fieldOut should be positive
+  //therefore the EMF for either is the opposite
 
+  if (isFieldIn) {
+    EMF = loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
+  } else {
+    EMF = -1 * loops * (dFlux * 60);
+  }
   textSize(16);
   fill(255);
   text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 400, 250);
 }
 
+float buttonX = 100;
+float buttonY = 50;
+float buttonWidth = 60;
+float buttonLength = 30;
+
+void drawButton() {
+  fill(204, 102, 0);
+  rect(buttonX, buttonY, buttonWidth, buttonLength);
+  fill(255);
+  text("Click here to toggle", buttonX, buttonY);
+}
 
 void mousePressed() {
   if (overWire) { 
@@ -247,4 +264,7 @@ void mouseReleased() {
 //after a mouse click, it updates variables
 void mouseClicked() {
   hasClicked = !hasClicked;
+  if (mouseX <= buttonX + buttonWidth && mouseX >= buttonX - buttonWidth && mouseY <= buttonY + buttonLength && mouseY >= buttonY - buttonLength) {
+    isFieldIn = !isFieldIn;
+  }
 }
