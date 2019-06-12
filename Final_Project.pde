@@ -1,16 +1,15 @@
 boolean hasClicked = false;
 
-
 //IMPORTANT NOTE: Since each frame is 1/60th of a second, it is not necessary to calculate timeElapsed, as dFlux can be calculated per frame
 
 //=============== FIELD VARIABLES ===========================
 //Magnetic field coordinates stay the same
-float xField = 500; //x coor of center of field
+float xField = 250; //x coor of center of field
 //float xEnd = xField + 300; 
-float yField = 800; //y coor of center of field
+float yField = 400; //y coor of center of field
 //float yEnd = yField +300;
-float fieldWidth = 300; //half of width of field (to be implemented with RectMode(RADIUS) later on)
-float fieldLength = 600; //half of length of field
+float fieldWidth = 150; //half of width of field (to be implemented with RectMode(RADIUS) later on)
+float fieldLength = 300; //half of length of field
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
@@ -53,7 +52,7 @@ PFont f;
 
 
 void setup() {
-  size(2000, 1500);
+  size(1000, 750);
   background(0, 0, 0);
   xWire= width/2.0; //center x coor
   yWire = height/2.0; //center y coor
@@ -121,10 +120,10 @@ void drawWire() {
 
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
-  rect(xWire -  wireWidth, yWire, 10, wireLength + 5);
-  rect(xWire +  wireWidth, yWire, 10, wireLength + 5);
-  rect(xWire, yWire - wireLength, wireWidth + 5, 10);
-  rect(xWire, yWire + wireLength, wireWidth + 5, 10);
+  rect(xWire -  wireWidth, yWire, 5, wireLength + 2.5);
+  rect(xWire +  wireWidth, yWire, 5, wireLength + 2.5);
+  rect(xWire, yWire - wireLength, wireWidth + 2.5, 5);
+  rect(xWire, yWire + wireLength, wireWidth + 2.5, 5);
 
   /*//OLD wire implementation
    fill(0);
@@ -138,15 +137,15 @@ void drawField() {
   // rect(xField, yField, fieldWidth, fieldLength);
 
   //nested for loops to make dotted pattern
-  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+50) {
-    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+50) {
+  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+25) {
+    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+25) {
       //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
         fill(255, 0, 0);
       } else {
         fill(0, 255, 0);
       }
-      ellipse(i, j, 6, 6);
+      ellipse(i, j, 3, 3);
     }
   }
 }
@@ -157,21 +156,27 @@ void keyPressed() {
   println(typing);
   // If the return key is pressed, save the String and clear it
   if (key == '\n' ) {
-    saved = float(typing);
-    if (counter == 0){
-      bField = saved;
+      saved = float(typing);
+      if (!(saved >= 10 || saved < 10)){
+        println("lmao good one!");
+      }
+      else{
+        if (counter == 0){
+          bField = saved;
+        }
+        if (counter == 1){
+          wireLength = saved / 2.0;
+        }
+        if (counter == 2){
+          wireWidth = saved / 2.0;
+        }
+        counter += 1;
+      }
+      // A String can be cleared by setting it equal to ""
+      typing = "";
+      saved = 0;
     }
-    if (counter == 1){
-      wireLength = saved / 2.0;
-    }
-    if (counter == 2){
-      wireWidth = saved / 2.0;
-    }
-    // A String can be cleared by setting it equal to ""
-    typing = "";
-    saved = 0;
-    counter += 1;
-  } else if(key == BACKSPACE){
+  else if (key == BACKSPACE){
     typing = "";
   }
   else{
@@ -182,22 +187,22 @@ void keyPressed() {
 }
 void draw() { 
   background(0);
-  text("Type in the magnetic field!", 800, 1100);
-  text("Input: " + typing, 800, 1250);
-  text("Saved text: " + saved, 800, 1400);
+  text("Type in the magnetic field!", 400, 550);
+  text("Input: " + typing, 400, 625);
+  text("Saved text: " + saved, 400, 700);
   if (bField != 0){
     background(0);
-    text("Great, now type in the length of the wire!", 800, 1100);
-    text("length: " + typing, 800, 1250);
-    text("Saved text: " + saved, 800, 1400);
+    text("Great, now type in the length of the wire!", 400, 550);
+    text("length: " + typing, 400, 625);
+    text("Saved text: " + saved, 400, 700);
     if (wireLength != 0){
       background(0);
-      text("Great, now type in the width of the wire!", 800, 1100);
-      text("width: " + typing, 800, 1250);
-      text("Saved text: " + saved, 800, 1400);
+      text("Great, now type in the width of the wire!", 400, 550);
+      text("width: " + typing, 400, 625);
+      text("Saved text: " + saved, 400, 700);
       if (wireWidth != 0){
         background(0);
-        text("Great, now we can test everything out!", 800, 1000);
+        text("Great, now we can test everything out!", 400, 500);
       }
     }
   }
@@ -210,9 +215,9 @@ void draw() {
 
   float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
 
-  textSize(100);
+  textSize(16);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 800, 500);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 400, 250);
 }
 
 
