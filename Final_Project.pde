@@ -122,7 +122,7 @@ void drawWire() {
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
   rect(xWire -  wireWidth, yWire, 10, wireLength + 5);
-  rect(xWire +  wireWidth, yWire, 5, wireLength + 5);
+  rect(xWire +  wireWidth, yWire, 10, wireLength + 5);
   rect(xWire, yWire - wireLength, wireWidth + 5, 10);
   rect(xWire, yWire + wireLength, wireWidth + 5, 10);
 
@@ -171,7 +171,10 @@ void keyPressed() {
     typing = "";
     saved = 0;
     counter += 1;
-  } else {
+  } else if(key == BACKSPACE){
+    typing = "";
+  }
+  else{
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
     typing = typing + key;
