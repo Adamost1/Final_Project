@@ -19,7 +19,7 @@ boolean isFieldIn = true; //true if the field is into page, false if field is ou
 //B and A can be used to calculate dFlux
 
 
-float bField = 10; //to be changeable
+float bField = 0; //to be changeable
 
 float loops = 1;
 float dTime = 0;
@@ -27,8 +27,8 @@ float dTime = 0;
 //=================WIRE VARIABLES=============================
 float xWire;
 float yWire;
-float wireLength = 100;
-float wireWidth = 100;
+float wireLength = 0;
+float wireWidth = 0;
 
 //Probably not gonna implement rotate
 //float theta = 90; //change if we want to implement rotate
@@ -122,7 +122,7 @@ void drawWire() {
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
   rect(xWire -  wireWidth, yWire, 10, wireLength + 5);
-  rect(xWire +  wireWidth, yWire, 10, wireLength + 5);
+  rect(xWire +  wireWidth, yWire, 5, wireLength + 5);
   rect(xWire, yWire - wireLength, wireWidth + 5, 10);
   rect(xWire, yWire + wireLength, wireWidth + 5, 10);
 
@@ -150,22 +150,66 @@ void drawField() {
     }
   }
 }
-
+float saved = 0;
+String typing = "";
+int counter = 0;
+void keyPressed() {
+  println(typing);
+  // If the return key is pressed, save the String and clear it
+  if (key == '\n' ) {
+    saved = float(typing);
+    if (counter == 0){
+      bField = saved;
+    }
+    if (counter == 1){
+      wireLength = saved / 2.0;
+    }
+    if (counter == 2){
+      wireWidth = saved / 2.0;
+    }
+    // A String can be cleared by setting it equal to ""
+    typing = "";
+    saved = 0;
+    counter += 1;
+  } else {
+    // Otherwise, concatenate the String
+    // Each character typed by the user is added to the end of the String variable.
+    typing = typing + key;
+  }
+}
 void draw() { 
   background(0);
+  text("Type in the magnetic field!", 800, 1100);
+  text("Input: " + typing, 800, 1250);
+  text("Saved text: " + saved, 800, 1400);
+  if (bField != 0){
+    background(0);
+    text("Great, now type in the length of the wire!", 800, 1100);
+    text("length: " + typing, 800, 1250);
+    text("Saved text: " + saved, 800, 1400);
+    if (wireLength != 0){
+      background(0);
+      text("Great, now type in the width of the wire!", 800, 1100);
+      text("width: " + typing, 800, 1250);
+      text("Saved text: " + saved, 800, 1400);
+      if (wireWidth != 0){
+        background(0);
+        text("Great, now we can test everything out!", 800, 1000);
+      }
+    }
+  }
   drawField();
   drawWire();
 
   //calculate dFlux per frame (draw runs once every frame)
   dFlux = bField * (areaInsideField() - initialArea);
-  println(initialArea + " " + areaInsideField());
   initialArea = areaInsideField();
 
   float EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
 
   textSize(100);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 350, 250);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 800, 500);
 }
 
 
