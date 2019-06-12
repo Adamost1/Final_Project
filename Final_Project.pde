@@ -120,10 +120,10 @@ void drawWire() {
 
   // Draw the wire in it's new position, represented yWire a box in a box
   fill(255);
-  rect(xWire -  wireWidth, yWire, 5, wireLength + 2.5);
-  rect(xWire +  wireWidth, yWire, 5, wireLength + 2.5);
-  rect(xWire, yWire - wireLength, wireWidth + 2.5, 5);
-  rect(xWire, yWire + wireLength, wireWidth + 2.5, 5);
+  rect(xWire -  wireWidth, yWire, wireLength * 0.1, wireLength * 1.05);
+  rect(xWire +  wireWidth, yWire, wireLength * 0.1, wireLength * 1.05);
+  rect(xWire, yWire - wireLength, wireWidth + wireLength * 0.05, wireLength * 0.1);
+  rect(xWire, yWire + wireLength, wireWidth + wireLength * 0.05, wireLength * 0.1);
 
   /*//OLD wire implementation
    fill(0);
@@ -220,6 +220,16 @@ void draw() {
     EMF = loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
   } else {
     EMF = -1 * loops * (dFlux * 60);
+  }
+  if (EMF != 0){
+    if (!isFieldIn){
+      fill(255, 0, 0);
+      triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire + wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05);
+    }
+    else{
+      fill(0, 0, 255);
+      triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire - wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05);
+    }
   }
   textSize(16);
   fill(255);
