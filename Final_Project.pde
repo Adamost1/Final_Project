@@ -264,7 +264,7 @@ void draw() {
   }
   textSize(16);
   fill(255);
-  text("Area (m^2): " + areaInsideField() + "\nFlux (T): " + flux(bField, areaInsideField())  + "\nChange in Flux (W): "  + dFlux  + "\nInduced EMF (V): " + EMF +"\n\nPress Shift to Reset", 400, 250);
+  text("Area (m^2): " + areaInsideField() + "\nFlux (T): " + flux(bField, areaInsideField())  + "\nChange in Flux (W/s): "  + dFlux  + "\nInduced EMF (V): " + EMF +"\n\nPress Shift to Reset", 400, 250);
 }
 
 float buttonX = 100;
