@@ -155,14 +155,24 @@ void drawField() {
 float saved = 0;
 String typing = "";
 int counter = 0;
+
+
 void keyPressed() {
   println(typing);
+
   // If the return key is pressed, save the String and clear it
   if (key == '\n' ) {
     saved = float(typing);
-    if (!(saved >= 10 || saved < 10)) {
+    if (!(saved >= 10 || saved < 10)) { //if the user input is not a number
       println("lmao good one!");
-    } else {
+    } 
+    else if( (counter == 1 || counter == 2) && saved <= 20){
+      println("too small");
+    }
+    else if((counter == 1 && saved >= height - 100 )|| (counter == 2 && saved >= width - 100) ){ //checks to see if input is too large, the 100 is arbitrary
+      println("too big");
+    }
+    else {
       if (counter == 0) {
         bField = saved;
       }
@@ -178,35 +188,49 @@ void keyPressed() {
     typing = "";
     saved = 0;
   } else if (key == BACKSPACE) {
+    println("backspace");
     typing = "";
-  } else {
+  }
+  else if(keyCode == SHIFT){
+    println("shift");
+  // typing = "";
+   //saved = 0;
+   bField = 0;
+   wireLength = 0;
+   wireWidth = 0;
+   counter = 0;
+  }
+  else {
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
     typing = typing + key;
+
   }
 }
 
+
+
 void generateUserInput() {
   background(0);
-  text("Type in the magnetic field!", 400, 550);
-  text("Input: " + typing, 400, 625);
-  text("Saved text: " + saved, 400, 700);
-  if (bField != 0) {
-    background(0);
-    text("Great, now type in the length of the wire!", 400, 550);
-    text("length: " + typing, 400, 625);
-    text("Saved text: " + saved, 400, 700);
-    if (wireLength != 0) {
-      background(0);
-      text("Great, now type in the width of the wire!", 400, 550);
-      text("width: " + typing, 400, 625);
+      text("Type in the magnetic field!", 400, 550);
+      text("Input: " + typing, 400, 625);
       text("Saved text: " + saved, 400, 700);
-      if (wireWidth != 0) {
+      if (bField != 0) {
         background(0);
-        text("Great, now we can test everything out!", 400, 500);
+        text("Great, now type in the length of the wire!", 400, 550);
+        text("length: " + typing, 400, 625);
+        text("Saved text: " + saved, 400, 700);
+        if (wireLength != 0) {
+          background(0);
+          text("Great, now type in the width of the wire!", 400, 550);
+          text("width: " + typing, 400, 625);
+          text("Saved text: " + saved, 400, 700);
+          if (wireWidth != 0) {
+            background(0);
+            text("Great, now we can test everything out!", 400, 500);
+          }
+        }
       }
-    }
-  }
 }
 
 void draw() { 
@@ -240,7 +264,7 @@ void draw() {
   }
   textSize(16);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF, 400, 250);
+  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF +"\n\nPress Shift to Reset", 400, 250);
 }
 
 float buttonX = 100;
