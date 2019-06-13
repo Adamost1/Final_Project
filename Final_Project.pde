@@ -233,6 +233,8 @@ void generateUserInput() {
       }
 }
 
+int frameCounter = 0;
+
 void draw() { 
   generateUserInput();
   drawButton();
@@ -262,9 +264,22 @@ void draw() {
       triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire - wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05);
     }
   }
+  
+
+
   textSize(16);
   fill(255);
-  text("Area (m^2): " + areaInsideField() + "\nFlux (T): " + flux(bField, areaInsideField())  + "\nChange in Flux (W/s): "  + dFlux  + "\nInduced EMF (V): " + EMF +"\n\nPress Shift to Reset", 400, 250);
+  
+if(frameCounter % 60 <= 50){
+   float a = areaInsideField();
+   float b = flux(bField, areaInsideField());
+   float c = dFlux;
+   float d = EMF;
+
+  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + d +"\n\nPress Shift to Reset", 400, 250);
+}
+  
+  frameCounter++;
 }
 
 float buttonX = 100;
