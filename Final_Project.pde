@@ -1,6 +1,7 @@
 boolean hasClicked = false;
 
 //IMPORTANT NOTE: Since each frame is 1/60th of a second, it is not necessary to calculate timeElapsed, as dFlux can be calculated per frame
+//Also important: We will equate 100 pixels with 1 meter
 
 //=============== FIELD VARIABLES ===========================
 //Magnetic field coordinates stay the same
@@ -184,7 +185,8 @@ void keyPressed() {
     typing = typing + key;
   }
 }
-void draw() { 
+
+void generateUserInput() {
   background(0);
   text("Type in the magnetic field!", 400, 550);
   text("Input: " + typing, 400, 625);
@@ -205,6 +207,10 @@ void draw() {
       }
     }
   }
+}
+
+void draw() { 
+  generateUserInput();
   drawButton();
   drawField();
   drawWire();
