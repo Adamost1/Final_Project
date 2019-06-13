@@ -94,7 +94,7 @@ float areaInsideField() {
     yOverlap = lowerField - upperWire;
   }
 
-  float returnVal = xOverlap * yOverlap;
+  float returnVal = (xOverlap * yOverlap) / 10000;      //scales the area, with the scale 100 pixels = 1 meter
 
   if (returnVal < 0) { //if the wire is outside the field, return 0
     return 0;
@@ -264,7 +264,7 @@ void draw() {
   }
   textSize(16);
   fill(255);
-  text("Area: " + areaInsideField() + "\nFlux: " + flux(bField, areaInsideField())  + "\nChange in Flux: "  + dFlux /*+  "\nChange in Time: " + timeElapsed */ + "\nInduced EMF: " + EMF +"\n\nPress Shift to Reset", 400, 250);
+  text("Area (m^2): " + areaInsideField() + "\nFlux (T): " + flux(bField, areaInsideField())  + "\nChange in Flux (W): "  + dFlux  + "\nInduced EMF (V): " + EMF +"\n\nPress Shift to Reset", 400, 250);
 }
 
 float buttonX = 100;
