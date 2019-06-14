@@ -234,6 +234,7 @@ void generateUserInput() {
 }
 
 int frameCounter = 0;
+float a,b,c,d = 0;
 
 void draw() { 
   generateUserInput();
@@ -269,16 +270,17 @@ void draw() {
 
   textSize(16);
   fill(255);
-  
-if(frameCounter % 60 <= 50){
-   float a = areaInsideField();
-   float b = flux(bField, areaInsideField());
-   float c = dFlux;
-   float d = EMF;
 
-  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + d +"\n\nPress Shift to Reset", 400, 250);
+
+if(frameCounter % 10 == 0){
+   a = areaInsideField();
+   b = flux(bField, areaInsideField());
+   c = dFlux;
+   d = EMF;
+
 }
-  
+
+    text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\n\nPress Shift to Reset", 400, 250);
   frameCounter++;
 }
 
