@@ -170,7 +170,10 @@ void keyPressed() {
       println("too small");
     } else if ((counter == 1 && saved >= height - 100 )|| (counter == 2 && saved >= width - 100) ) { //checks to see if input is too large, the 100 is arbitrary
       println("too big");
-    } else {
+    } 
+    else if(counter == 3 && saved <= 0){
+     println("doesn't make sense bro"); 
+    }else {
       if (counter == 0) {
         bField = saved;
       }
@@ -210,23 +213,23 @@ void keyPressed() {
 
 void generateUserInput() {
   background(0);
-  text("Type in the magnetic field!", 400, 550);
-  text("Strength of Magnetic Field: " + typing, 400, 625);
+  text("Type in the Magnetic Field!", 0.4 * width , 0.75 * height);
+  text("Strength of Magnetic Field: " + typing, 0.4 * width, 0.8 * height);
   if (bField != 0) {
     background(0);
-    text("Great, now type in the length of the wire!", 400, 550);
-    text("length: " + typing, 400, 625);
+    text("Great, now type in the length of the wire!", 0.4 * width , 0.75 * height);
+    text("length: " + typing, 0.4 * width, 0.8 * height);
     if (wireLength != 0) {
       background(0);
-      text("Great, now type in the width of the wire!", 400, 550);
-      text("width: " + typing, 400, 625);
+      text("Great, now type in the width of the wire!", 0.4 * width , 0.75 * height);
+      text("width: " + typing, 0.4 * width, 0.8 * height);
       if (wireWidth != 0) {
         background(0);
-        text("Great, now type the number of loops of wire!", 400, 550);
-        text("# of loops: " + typing, 400, 625);
+        text("Great, now type the number of loops of wire!", 0.4 * width , 0.75 * height);
+        text("# of loops: " + typing, 0.4 * width, 0.8 * height);
         if (loops != 0){
           background(0);
-          text("Great, now we can test our code!", 400, 550);
+          text("Great, now we can test our code!", 0.4 * width , 0.75 * height);
         }
       }
     }
@@ -285,7 +288,8 @@ void draw() {
     d = EMF;
   }
 
-  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\n\nPress Shift to Reset", 0.75 * width , 0.1 * height);
+  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
+  text("Press Shift to Reset",  0.4* width, 0.7 * height);
   frameCounter++;
 }
 
