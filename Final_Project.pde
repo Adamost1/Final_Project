@@ -21,7 +21,7 @@ boolean isFieldIn = true; //true if the field is into page, false if field is ou
 
 float bField = 0; //to be changeable
 
-float loops = 1;
+float loops = 0;
 float dTime = 0;
 
 //=================WIRE VARIABLES=============================
@@ -165,14 +165,11 @@ void keyPressed() {
     saved = float(typing);
     if (!(saved >= 10 || saved < 10)) { //if the user input is not a number
       println("lmao good one!");
-    } 
-    else if( (counter == 1 || counter == 2) && saved <= 20){
+    } else if ( (counter == 1 || counter == 2) && saved <= 20) {
       println("too small");
-    }
-    else if((counter == 1 && saved >= height - 100 )|| (counter == 2 && saved >= width - 100) ){ //checks to see if input is too large, the 100 is arbitrary
+    } else if ((counter == 1 && saved >= height - 100 )|| (counter == 2 && saved >= width - 100) ) { //checks to see if input is too large, the 100 is arbitrary
       println("too big");
-    }
-    else {
+    } else {
       if (counter == 0) {
         bField = saved;
       }
@@ -182,6 +179,9 @@ void keyPressed() {
       if (counter == 2) {
         wireWidth = saved / 2.0;
       }
+      if (counter == 3){
+        loops = saved;
+      }
       counter += 1;
     }
     // A String can be cleared by setting it equal to ""
@@ -190,21 +190,18 @@ void keyPressed() {
   } else if (key == BACKSPACE) {
     println("backspace");
     typing = "";
-  }
-  else if(keyCode == SHIFT){
+  } else if (keyCode == SHIFT) {
     println("shift");
-  // typing = "";
-   //saved = 0;
-   bField = 0;
-   wireLength = 0;
-   wireWidth = 0;
-   counter = 0;
-  }
-  else {
+    // typing = "";
+    //saved = 0;
+    bField = 0;
+    wireLength = 0;
+    wireWidth = 0;
+    counter = 0;
+  } else {
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
     typing = typing + key;
-
   }
 }
 
@@ -212,29 +209,31 @@ void keyPressed() {
 
 void generateUserInput() {
   background(0);
-      text("Type in the magnetic field!", 400, 550);
-      text("Input: " + typing, 400, 625);
-      text("Saved text: " + saved, 400, 700);
-      if (bField != 0) {
+  text("Type in the magnetic field!", 400, 550);
+  text("Strength of Magnetic Field: " + typing, 400, 625);
+  if (bField != 0) {
+    background(0);
+    text("Great, now type in the length of the wire!", 400, 550);
+    text("length: " + typing, 400, 625);
+    if (wireLength != 0) {
+      background(0);
+      text("Great, now type in the width of the wire!", 400, 550);
+      text("width: " + typing, 400, 625);
+      if (wireWidth != 0) {
         background(0);
-        text("Great, now type in the length of the wire!", 400, 550);
-        text("length: " + typing, 400, 625);
-        text("Saved text: " + saved, 400, 700);
-        if (wireLength != 0) {
+        text("Great, now type the number of loops of wire!", 400, 550);
+        text("# of loops: " + typing, 400, 625);
+        if (loops != 0){
           background(0);
-          text("Great, now type in the width of the wire!", 400, 550);
-          text("width: " + typing, 400, 625);
-          text("Saved text: " + saved, 400, 700);
-          if (wireWidth != 0) {
-            background(0);
-            text("Great, now we can test everything out!", 400, 500);
-          }
+          text("Great, now we can test our code!", 400, 550);
         }
       }
+    }
+  }
 }
 
 int frameCounter = 0;
-float a,b,c,d = 0;
+float a, b, c, d = 0;
 
 void draw() { 
   generateUserInput();
@@ -261,32 +260,31 @@ void draw() {
       fill(255, 0, 0);
       triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire + wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05); //bottom triangle
       triangle(xWire, yWire - 0.95 * wireLength, xWire, yWire - wireLength * 1.15, xWire - wireLength * 0.1 * sqrt(3), yWire - wireLength * 1.05); //upper triangle
-      triangle(xWire - 0.95 * wireWidth, yWire, xWire - wireWidth * 1.15, yWire, xWire - wireWidth * 1.05 , yWire + wireWidth * 0.1 * sqrt(3));
-      triangle(xWire + 0.95 * wireWidth, yWire, xWire + wireWidth * 1.15, yWire, xWire + wireWidth * 1.05 , yWire - wireWidth * 0.1 * sqrt(3));   
+      triangle(xWire - 0.95 * wireWidth, yWire, xWire - wireWidth * 1.15, yWire, xWire - wireWidth * 1.05, yWire + wireWidth * 0.1 * sqrt(3));
+      triangle(xWire + 0.95 * wireWidth, yWire, xWire + wireWidth * 1.15, yWire, xWire + wireWidth * 1.05, yWire - wireWidth * 0.1 * sqrt(3));
     } else { //if induced EMF is negative, the current is clockwise
       fill(0, 0, 255);
       triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire - wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05);
       triangle(xWire, yWire - 0.95 * wireLength, xWire, yWire - wireLength * 1.15, xWire + wireLength * 0.1 * sqrt(3), yWire - wireLength * 1.05);
-      triangle(xWire - 0.95 * wireWidth, yWire, xWire - wireWidth * 1.15, yWire, xWire - wireWidth * 1.05 , yWire - wireWidth * 0.1 * sqrt(3));
-      triangle(xWire + 0.95 * wireWidth, yWire, xWire + wireWidth * 1.15, yWire, xWire + wireWidth * 1.05 , yWire + wireWidth * 0.1 * sqrt(3));  
+      triangle(xWire - 0.95 * wireWidth, yWire, xWire - wireWidth * 1.15, yWire, xWire - wireWidth * 1.05, yWire - wireWidth * 0.1 * sqrt(3));
+      triangle(xWire + 0.95 * wireWidth, yWire, xWire + wireWidth * 1.15, yWire, xWire + wireWidth * 1.05, yWire + wireWidth * 0.1 * sqrt(3));
     }
   }
-  
+
 
 
   textSize(16);
   fill(255);
 
 
-if(frameCounter % 10 == 0){
-   a = areaInsideField();
-   b = flux(bField, areaInsideField());
-   c = dFlux;
-   d = EMF;
+  if (frameCounter % 10 == 0) {
+    a = areaInsideField();
+    b = flux(bField, areaInsideField());
+    c = dFlux;
+    d = EMF;
+  }
 
-}
-
-    text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\n\nPress Shift to Reset", 400, 250);
+  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\n\nPress Shift to Reset", 400, 250);
   frameCounter++;
 }
 
