@@ -59,7 +59,8 @@ void setup() {
   yWire = height/2.0; //center y coor
   rectMode(RADIUS);
   ellipseMode(RADIUS);
-  f = createFont("Arial", 16);
+  f = createFont("Georgia", 16);
+  textFont(f);
 }
 
 float flux(float B, float area) {
@@ -284,7 +285,7 @@ void draw() {
     d = EMF;
   }
 
-  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\n\nPress Shift to Reset", 400, 250);
+  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\n\nPress Shift to Reset", 0.75 * width , 0.1 * height);
   frameCounter++;
 }
 
@@ -297,7 +298,13 @@ void drawButton() {
   fill(204, 102, 0);
   rect(buttonX, buttonY, buttonWidth, buttonLength);
   fill(255);
-  text("Click here to toggle", buttonX, buttonY);
+  text("TOGGLE", buttonX - 0.5 * buttonWidth, buttonY);
+  if (isFieldIn){
+    text("Magnetic Field: Into the Page", buttonX + 2 * buttonWidth, buttonY);
+  }
+  if (!isFieldIn){
+    text("Magnetic Field: Out of the Page", buttonX + 2 * buttonWidth, buttonY);
+  }
 }
 
 void mousePressed() {
