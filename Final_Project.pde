@@ -166,9 +166,9 @@ void keyPressed() {
     saved = float(typing);
     if (!(saved >= 10 || saved < 10)) { //if the user input is not a number
       println("lmao good one!");
-    } else if ( (counter == 1 || counter == 2) && saved <= 20) {
+    } else if ((counter == 1  && saved <= 0.02 * width) || (counter == 2 && saved <= 0.02 * height)){
       println("too small");
-    } else if ((counter == 1 && saved >= height - 100 )|| (counter == 2 && saved >= width - 100) ) { //checks to see if input is too large, the 100 is arbitrary
+    } else if ((counter == 1 && saved >= 0.9 * width )|| (counter == 2 && saved >= 0.9* height) ) { //checks to see if input is too large, the 100 is arbitrary
       println("too big");
     } 
     else if(counter == 3 && saved <= 0){
