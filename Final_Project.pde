@@ -257,12 +257,15 @@ void draw() {
     EMF = -1 * loops * (dFlux * 60);
   }
   if (EMF != 0) {
-    if (!isFieldIn) {
+    if (EMF < 0) {//if induced EMF is negative, the field goes out the page and the current is counterclockwise
       fill(255, 0, 0);
-      triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire + wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05);
-    } else {
+      triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire + wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05); //bottom triangle
+      triangle(xWire, yWire - 0.95 * wireLength, xWire, yWire - wireLength * 1.15, xWire - wireLength * 0.1 * sqrt(3), yWire - wireLength * 1.05); //upper triangle
+      triangle(xWire - 0.95 * wireWidth, yWire, xWire - wireWidth * 1.15, yWire, xWire - wireWidth * 1.05 , yWire + wireWidth * 0.1 * sqrt(3));
+    } else { //if induced EMF is positive, the field goes into the page and the current is clockwise
       fill(0, 0, 255);
       triangle(xWire, yWire + 0.95 * wireLength, xWire, yWire + wireLength * 1.15, xWire - wireLength * 0.1 * sqrt(3), yWire + wireLength * 1.05);
+      triangle(xWire, yWire - 0.95 * wireLength, xWire, yWire - wireLength * 1.15, xWire + wireLength * 0.1 * sqrt(3), yWire - wireLength * 1.05);
     }
   }
   
