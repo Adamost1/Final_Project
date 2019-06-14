@@ -173,7 +173,8 @@ void keyPressed() {
     } 
     else if(counter == 3 && saved <= 0){
      println("doesn't make sense bro"); 
-    }else {
+    }
+    else {
       if (counter == 0) {
         bField = saved;
       }
@@ -287,7 +288,9 @@ void draw() {
     c = dFlux;
     d = EMF;
   }
-
+  fill(0, 100, 100);
+  rect(0.84 * width, 0.15 * height, 0.1 * width, 0.1 * height);
+  fill(255);
   text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
   text("Press Shift to Reset",  0.4* width, 0.7 * height);
   frameCounter++;
