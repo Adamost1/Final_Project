@@ -322,16 +322,12 @@ void draw() {
     c = dFlux;
     d = EMF;
   }
-<<<<<<< HEAD
+
   fill(0);
   text("Area of Wire(m^2): " + round(a) + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + round(bField) + "\nFlux through Wire(W): " + round(b)  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
   fill(200, 255, 200);
-=======
-  fill(0, 100, 100);
-  rect(0.84 * width, 0.15 * height, 0.1 * width, 0.1 * height);
-  fill(255);
-  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
->>>>>>> b927adab00717fc53d863020e07bfb7c0b9703f8
+
+
   text("Press Shift to Reset",  0.4* width, 0.7 * height);
   frameCounter++;
 }
