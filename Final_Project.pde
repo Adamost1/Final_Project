@@ -5,12 +5,12 @@ boolean hasClicked = false;
 
 //=============== FIELD VARIABLES ===========================
 //Magnetic field coordinates stay the same
-float xField = 250; //x coor of center of field
+float xField; //x coor of center of field
 //float xEnd = xField + 300; 
-float yField = 400; //y coor of center of field
+float yField; //y coor of center of field
 //float yEnd = yField +300;
-float fieldWidth = 150; //half of width of field (to be implemented with RectMode(RADIUS) later on)
-float fieldLength = 300; //half of length of field
+float fieldWidth; //half of width of field (to be implemented with RectMode(RADIUS) later on)
+float fieldLength; //half of length of field
 
 boolean isFieldIn = true; //true if the field is into page, false if field is out of page
 
@@ -39,8 +39,6 @@ boolean locked = false; //Is the wire being moved by the cursor?
 
 
 //====================FORMULA VARIABLES=========================
-float fluxInitial;
-float fluxFinal;
 float dFlux;
 
 //initialize initialArea to calculate dArea and dFlux later on
@@ -61,10 +59,21 @@ void setup() {
   ellipseMode(RADIUS);
   f = createFont("Georgia", 16);
   textFont(f);
+  
+  xField = 0.25 * width;
+  yField = 0.6 * height;
+  fieldWidth = 0.15 * width;
+  fieldLength = 0.3 * height;
+  
 }
 
 float flux(float B, float area) {
-  return B*area;
+  if(isFieldIn){ //flux into the page should be negative
+  return -1 * B * area;
+  }
+  else{ //flux out of the page should be positive
+    return B * area;
+  }
 }
 
 float areaInsideField() {
@@ -153,23 +162,27 @@ void drawField() {
     }
   }
 }
+
+
 float saved = 0;
 String typing = "";
 int counter = 0;
-
-
+String caseText = "";
 void keyPressed() {
   println(typing);
 
   // If the return key is pressed, save the String and clear it
   if (key == '\n' ) {
     saved = float(typing);
-    if (!(saved >= 10 || saved < 10)) { //if the user input is not a number
+    if (!(saved >= 10 || saved < 10)) { //if the user input is not a number, the 10s are arbitrary
       println("lmao good one!");
-    } else if ((counter == 1  && saved <= 0.02 * width) || (counter == 2 && saved <= 0.02 * height)){
+      caseText = "\n                      Ms.Sharaf, do you not know what a number is?";
+    } else if (saved < 0 ||(counter == 1  && saved < 0.02 * width) || (counter == 2 && saved < 0.02 * height)){ //checks if the input is too small
       println("too small");
-    } else if ((counter == 1 && saved >= 0.9 * width )|| (counter == 2 && saved >= 0.9* height) ) { //checks to see if input is too large, the 100 is arbitrary
+      caseText = "\n                      Value too small, try again";
+    } else if ((counter == 1 && saved >= 0.8 * width )|| (counter == 2 && saved >= 0.8* height) ) { //checks to see if input is too large
       println("too big");
+      caseText = "\n                      Value too large, try again";
     } 
     else if(counter == 3 && saved <= 0){
      println("doesn't make sense bro"); 
@@ -187,6 +200,7 @@ void keyPressed() {
         loops = saved;
       }
       counter += 1;
+      caseText = "";
     }
     // A String can be cleared by setting it equal to ""
     typing = "";
@@ -194,7 +208,7 @@ void keyPressed() {
   } else if (key == BACKSPACE) {
     println("backspace");
     typing = "";
-  } else if (keyCode == SHIFT) {
+  } else if (keyCode == SHIFT) { //press shift to reset values
     println("shift");
     // typing = "";
     //saved = 0;
@@ -202,6 +216,7 @@ void keyPressed() {
     wireLength = 0;
     wireWidth = 0;
     counter = 0;
+    loops = 0;
   } else {
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
@@ -209,26 +224,44 @@ void keyPressed() {
   }
 }
 
+void drawMisc(){
+  //generates ring around output values
+  fill(0, 35, 139);
+  rect(width * 0.84, height * 0.18, 130, 100); 
+  fill(66, 241, 244);
+  rect(width * 0.84, height * 0.18, 120, 90);
+  
+  
+}
 
 
 void generateUserInput() {
   background(0);
-  text("Type in the Magnetic Field!", 0.4 * width , 0.75 * height);
-  text("Strength of Magnetic Field: " + typing, 0.4 * width, 0.8 * height);
+  fill(145,189,30);
+  text("Type in the desired MAGNITUDE of Magnetic Field Below!" + caseText, 0.4 * width , 0.75 * height);
+  fill(215, 244, 66);
+  text("Magnitude of Magnetic Field (T): " + typing, 0.4 * width, 0.85 * height);
   if (bField != 0) {
     background(0);
-    text("Great, now type in the length of the wire!", 0.4 * width , 0.75 * height);
-    text("length: " + typing, 0.4 * width, 0.8 * height);
+      fill(145,189,30);
+    text("Great, now type in the Length of the Wire! (100px:1m)" + caseText, 0.4 * width , 0.75 * height);
+    fill(215, 244, 66);
+    text("Length (m): " + typing, 0.4 * width, 0.85 * height);
     if (wireLength != 0) {
       background(0);
-      text("Great, now type in the width of the wire!", 0.4 * width , 0.75 * height);
-      text("width: " + typing, 0.4 * width, 0.8 * height);
+        fill(145,189,30);
+      text("Great, now type in the Width of the Wire! (100px:1m)" + caseText, 0.4 * width , 0.75 * height);
+      fill(215, 244, 66);
+      text("Width (m): " + typing, 0.4 * width, 0.85 * height);
       if (wireWidth != 0) {
         background(0);
-        text("Great, now type the number of loops of wire!", 0.4 * width , 0.75 * height);
-        text("# of loops: " + typing, 0.4 * width, 0.8 * height);
+          fill(145,189,30);
+        text("Great, now type the number of loops of wire!" + caseText, 0.4 * width , 0.75 * height);
+        fill(215, 244, 66);
+        text("# of loops: " + typing, 0.4 * width, 0.85 * height);
         if (loops != 0){
           background(0);
+          fill(145,189,30);
           text("Great, now we can test our code!", 0.4 * width , 0.75 * height);
         }
       }
@@ -240,7 +273,8 @@ int frameCounter = 0;
 float a, b, c, d = 0;
 
 void draw() { 
-  generateUserInput();
+  generateUserInput(); //has to be first or else program wont work cuz it implements background()
+  drawMisc();
   drawButton();
   drawField();
   drawWire();
@@ -255,9 +289,9 @@ void draw() {
   //therefore the EMF for either is the opposite
 
   if (isFieldIn) {
-    EMF = loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
+    EMF = -1 * loops * (dFlux * 60); //dFlux / timeElapsed = dFlux * 60
   } else {
-    EMF = -1 * loops * (dFlux * 60);
+    EMF = loops * (dFlux * 60);
   }
   if (EMF != 0) {
     if (EMF > 0) {//if induced EMF is positive, the current is counterclockwise
@@ -282,13 +316,14 @@ void draw() {
 
 
   if (frameCounter % 10 == 0) {
-    a = areaInsideField();
+    a = 4 * wireWidth * wireLength;
     b = flux(bField, areaInsideField());
     c = dFlux;
     d = EMF;
   }
-
-  text("Area (m^2): " + a + "\nFlux (T): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
+  fill(0);
+  text("Area of Wire(m^2): " + round(a) + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + round(bField) + "\nFlux through Wire(W): " + round(b)  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
+  fill(200, 255, 200);
   text("Press Shift to Reset",  0.4* width, 0.7 * height);
   frameCounter++;
 }
@@ -299,10 +334,11 @@ float buttonWidth = 60;
 float buttonLength = 30;
 
 void drawButton() {
-  fill(204, 102, 0);
+  fill(65, 106, 244);
   rect(buttonX, buttonY, buttonWidth, buttonLength);
-  fill(255);
-  text("TOGGLE", buttonX - 0.5 * buttonWidth, buttonY);
+  fill(0);
+  text("TOGGLE\n  FIELD", buttonX - 0.5 * buttonWidth, buttonY);
+  fill(190, 65, 244);
   if (isFieldIn){
     text("Magnetic Field: Into the Page", buttonX + 2 * buttonWidth, buttonY);
   }
