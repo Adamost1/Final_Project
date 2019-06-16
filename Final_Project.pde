@@ -228,9 +228,9 @@ void keyPressed() {
 void drawMisc(){
   //generates ring around output values
   fill(0, 35, 139);
-  rect(width * 0.84, height * 0.18, 130, 100); 
+  rect(width * 0.75, height * 0.18, 155, 100); 
   fill(66, 241, 244);
-  rect(width * 0.84, height * 0.18, 120, 90);
+  rect(width * 0.75, height * 0.18, 145, 90);
   
   
 }
@@ -322,9 +322,20 @@ void draw() {
     c = dFlux;
     d = EMF;
   }
-
+  
+  String directionOfCurrent;
+  if(EMF < 0){
+    directionOfCurrent = "Counter Clockwise";
+  }
+  else if(EMF > 0){
+   directionOfCurrent = "Clockwise";
+  }
+  else{
+   directionOfCurrent = ""; 
+  }
+  
   fill(0);
-  text("Area of Wire(m^2): " + round(a) + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + round(bField) + "\nFlux through Wire(W): " + round(b)  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) , 0.75 * width , 0.1 * height);
+  text("Area of Wire(m^2): " + round(a) + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + round(bField) + "\nFlux through Wire(W): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\nInduced Current: " + directionOfCurrent , 0.65 * width , 0.1 * height);
   fill(200, 255, 200);
 
 
