@@ -8,7 +8,7 @@ boolean hasClicked = false;
 float xField; //x coor of center of field
 //float xEnd = xField + 300; 
 float yField; //y coor of center of field
-//float yEnd = yField +300;
+//float yEnd = yField + 300;
 float fieldWidth; //half of width of field (to be implemented with RectMode(RADIUS) later on)
 float fieldLength; //half of length of field
 
@@ -51,7 +51,7 @@ PFont f;
 
 
 void setup() {
-  size(1000, 750);
+  size(800, 600);
   background(0, 0, 0);
   xWire= width/2.0; //center x coor
   yWire = height/2.0; //center y coor
@@ -172,15 +172,17 @@ void keyPressed() {
   println(typing);
 
   // If the return key is pressed, save the String and clear it
-  if (key == '\n' ) {
+  if (key == '\n') {
     saved = float(typing);
     if (!(saved >= 10 || saved < 10)) { //if the user input is not a number, the 10s are arbitrary
       println("lmao good one!");
       caseText = "\n                      Ms.Sharaf, do you not know what a number is?";
-    } else if (saved < 0 ||(counter == 1  && saved < 0.02 * width) || (counter == 2 && saved < 0.02 * height)){ //checks if the input is too small
+    } 
+    else if (saved < 0 ||(counter == 1  && saved < 0.02 * width) || (counter == 2 && saved < 0.02 * height)){ //checks if the input is too small
       println("too small");
       caseText = "\n                      Value too small, try again";
-    } else if ((counter == 1 && saved >= 0.8 * width )|| (counter == 2 && saved >= 0.8* height) ) { //checks to see if input is too large
+    } 
+    else if ((counter == 1 && saved >= 0.8 * width )|| (counter == 2 && saved >= 0.8* height) ) { //checks to see if input is too large
       println("too big");
       caseText = "\n                      Value too large, try again";
     } 
@@ -206,10 +208,12 @@ void keyPressed() {
     // A String can be cleared by setting it equal to ""
     typing = "";
     saved = 0;
-  } else if (key == BACKSPACE) {
+  } 
+  else if (key == BACKSPACE) {
     println("backspace");
     typing = "";
-  } else if (keyCode == SHIFT) { //press shift to reset values
+  } 
+  else if (keyCode == SHIFT) { //press shift to reset values
     println("shift");
     // typing = "";
     //saved = 0;
@@ -218,10 +222,57 @@ void keyPressed() {
     wireWidth = 0;
     counter = 0;
     loops = 0;
-  } else {
+  } 
+  else {
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
-    typing = typing + key;
+    if (key == '46'){
+      typing = typing + ".";
+      caseText = "";
+    }
+    else if (key == '48'){
+      typing = typing + "0";
+      caseText = "";
+    }
+    else if (key == '49'){
+      typing = typing + "1";
+      caseText = "";
+    }
+    else if (key == '50'){
+      typing = typing + "2";
+      caseText = "";
+    }
+    else if (key == '51'){
+      typing = typing + "3";
+      caseText = "";
+    }
+    else if (key == '52'){
+      typing = typing + "4";
+      caseText = "";
+    }
+    else if (key == '53'){
+      typing = typing + "5";
+      caseText = "";
+    }
+    else if (key == '54'){
+      typing = typing + "6";
+      caseText = "";
+    }
+    else if (key == '55'){
+      typing = typing + "7";
+      caseText = "";
+    }
+    else if (key == '56'){
+      typing = typing + "8";
+      caseText = "";
+    }
+    else if (key == '57'){
+      typing = typing + "9";
+      caseText = "";
+    }
+    else{
+      caseText = "\n Ms. Sharaf, why are you typing a letter?";
+    }
   }
 }
 
@@ -238,19 +289,21 @@ void drawMisc(){
 
 void generateUserInput() {
   background(0);
-  fill(145,189,30);
-  text("Type in the desired MAGNITUDE of Magnetic Field Below!" + caseText, 0.4 * width , 0.75 * height);
+  text("Press anywhere to start!" + caseText, 0.4 * width , 0.55 * height);
+  fill(145, 189, 30);
+  text("Type in the desired MAGNITUDE of Magnetic Field Below!", 0.4 * width , 0.75 * height);
   fill(215, 244, 66);
   text("Magnitude of Magnetic Field (T): " + typing, 0.4 * width, 0.85 * height);
   if (bField != 0) {
     background(0);
-      fill(145,189,30);
+    fill(145, 189, 30);
+    text("" + caseText, 0.4 * width , 0.55 * height);
     text("Great, now type in the Length of the Wire! (100px:1m)" + caseText, 0.4 * width , 0.75 * height);
     fill(215, 244, 66);
     text("Length (m): " + typing, 0.4 * width, 0.85 * height);
     if (wireLength != 0) {
       background(0);
-        fill(145,189,30);
+      fill(145,189,30);
       text("Great, now type in the Width of the Wire! (100px:1m)" + caseText, 0.4 * width , 0.75 * height);
       fill(215, 244, 66);
       text("Width (m): " + typing, 0.4 * width, 0.85 * height);
@@ -335,7 +388,7 @@ void draw() {
   }
   
   fill(0);
-  text("Area of Wire(m^2): " + round(a) + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + round(bField) + "\nFlux through Wire(W): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + round(d) +"\nInduced Current: " + directionOfCurrent , 0.65 * width , 0.1 * height);
+  text("Area of Wire(m^2): " + a / 10000 + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + bField + "\nFlux through Wire(W): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + d +"\nInduced Current: " + directionOfCurrent , 0.65 * width , 0.1 * height);
   fill(200, 255, 200);
 
 
