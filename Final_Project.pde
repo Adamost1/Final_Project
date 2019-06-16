@@ -175,7 +175,6 @@ void keyPressed() {
   if (key == '\n') {
     saved = float(typing);
     if (!(saved >= 10 || saved < 10)) { //if the user input is not a number, the 10s are arbitrary
-      println("lmao good one!");
       caseText = "\n                      Ms.Sharaf, do you not know what a number is?";
     } 
     else if (saved < 0 ||(counter == 1  && saved < 0.02 * width) || (counter == 2 && saved < 0.02 * height)){ //checks if the input is too small
@@ -226,53 +225,7 @@ void keyPressed() {
   else {
     // Otherwise, concatenate the String
     // Each character typed by the user is added to the end of the String variable.
-    if (key == '46'){
-      typing = typing + ".";
-      caseText = "";
-    }
-    else if (key == '48'){
-      typing = typing + "0";
-      caseText = "";
-    }
-    else if (key == '49'){
-      typing = typing + "1";
-      caseText = "";
-    }
-    else if (key == '50'){
-      typing = typing + "2";
-      caseText = "";
-    }
-    else if (key == '51'){
-      typing = typing + "3";
-      caseText = "";
-    }
-    else if (key == '52'){
-      typing = typing + "4";
-      caseText = "";
-    }
-    else if (key == '53'){
-      typing = typing + "5";
-      caseText = "";
-    }
-    else if (key == '54'){
-      typing = typing + "6";
-      caseText = "";
-    }
-    else if (key == '55'){
-      typing = typing + "7";
-      caseText = "";
-    }
-    else if (key == '56'){
-      typing = typing + "8";
-      caseText = "";
-    }
-    else if (key == '57'){
-      typing = typing + "9";
-      caseText = "";
-    }
-    else{
-      caseText = "\n Ms. Sharaf, why are you typing a letter?";
-    }
+    typing = typing + key;
   }
 }
 
@@ -289,9 +242,8 @@ void drawMisc(){
 
 void generateUserInput() {
   background(0);
-  text("Press anywhere to start!" + caseText, 0.4 * width , 0.55 * height);
   fill(145, 189, 30);
-  text("Type in the desired MAGNITUDE of Magnetic Field Below!", 0.4 * width , 0.75 * height);
+  text("Type in the desired MAGNITUDE of Magnetic Field Below!" + caseText, 0.4 * width , 0.75 * height);
   fill(215, 244, 66);
   text("Magnitude of Magnetic Field (T): " + typing, 0.4 * width, 0.85 * height);
   if (bField != 0) {
