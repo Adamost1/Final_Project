@@ -51,7 +51,7 @@ PFont f;
 
 
 void setup() {
-  size(800, 600);
+  size(2000, 1500);
   background(0, 0, 0);
   xWire= width/2.0; //center x coor
   yWire = height/2.0; //center y coor
