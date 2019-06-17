@@ -150,8 +150,8 @@ void drawField() {
   // rect(xField, yField, fieldWidth, fieldLength);
 
   //nested for loops to make dotted pattern
-  for (float i = xField-fieldWidth; i < xField + fieldWidth; i = i+25) {
-    for (float j = yField-fieldLength; j < yField + fieldLength; j = j+25) {
+  for (float i = xField-fieldWidth; i <= xField + fieldWidth; i = i+25) {
+    for (float j = yField-fieldLength; j <= yField + fieldLength; j = j+25) {
       //if field is into page, field turns red. If it is out of page, it turns green.
       if (isFieldIn) {
         fill(255, 0, 0);
@@ -243,32 +243,32 @@ void drawMisc(){
 void generateUserInput() {
   background(0);
   fill(145, 189, 30);
-  text("Type in the desired MAGNITUDE of Magnetic Field Below!" + caseText, 0.4 * width , 0.75 * height);
+  text("Type in the desired MAGNITUDE of Magnetic Field Below!" + caseText, 0.43 * width , 0.75 * height);
   fill(215, 244, 66);
-  text("Magnitude of Magnetic Field (T): " + typing, 0.4 * width, 0.85 * height);
+  text("Magnitude of Magnetic Field (T): " + typing, 0.43 * width, 0.85 * height);
   if (bField != 0) {
     background(0);
     fill(145, 189, 30);
-    text("" + caseText, 0.4 * width , 0.55 * height);
-    text("Great, now type in the Length of the Wire! (100px:1m)" + caseText, 0.4 * width , 0.75 * height);
+    text("" + caseText, 0.43 * width , 0.55 * height);
+    text("Great, now type in the Length of the Wire! (100px:1m)" + caseText, 0.43 * width , 0.75 * height);
     fill(215, 244, 66);
-    text("Length (m): " + typing, 0.4 * width, 0.85 * height);
+    text("Length (m): " + typing, 0.43 * width, 0.85 * height);
     if (wireLength != 0) {
       background(0);
       fill(145,189,30);
-      text("Great, now type in the Width of the Wire! (100px:1m)" + caseText, 0.4 * width , 0.75 * height);
+      text("Great, now type in the Width of the Wire! (100px:1m)" + caseText, 0.43 * width , 0.75 * height);
       fill(215, 244, 66);
-      text("Width (m): " + typing, 0.4 * width, 0.85 * height);
+      text("Width (m): " + typing, 0.43 * width, 0.85 * height);
       if (wireWidth != 0) {
         background(0);
           fill(145,189,30);
-        text("Great, now type the number of loops of wire!" + caseText, 0.4 * width , 0.75 * height);
+        text("Great, now type the number of loops of wire!" + caseText, 0.43 * width , 0.75 * height);
         fill(215, 244, 66);
-        text("# of loops: " + typing, 0.4 * width, 0.85 * height);
+        text("# of loops: " + typing, 0.43 * width, 0.85 * height);
         if (loops != 0){
           background(0);
           fill(145,189,30);
-          text("Great, now we can test our code!", 0.4 * width , 0.75 * height);
+          text("Great, now we can test our code!", 0.43 * width , 0.75 * height);
         }
       }
     }
@@ -344,7 +344,7 @@ void draw() {
   fill(200, 255, 200);
 
 
-  text("Press Shift to Reset",  0.4* width, 0.7 * height);
+  text("Press Shift to Reset",  0.43 * width, 0.7 * height);
   frameCounter++;
 }
 
