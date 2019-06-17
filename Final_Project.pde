@@ -51,7 +51,7 @@ PFont f;
 
 
 void setup() {
-  size(2000, 1500);
+  size(1000, 750);
   background(0, 0, 0);
   xWire= width/2.0; //center x coor
   yWire = height/2.0; //center y coor
@@ -232,9 +232,9 @@ void keyPressed() {
 void drawMisc(){
   //generates ring around output values
   fill(0, 35, 139);
-  rect(width * 0.75, height * 0.18, 155, 100); 
+  rect(width * 0.75, height * 0.16, 0.16 * width, 0.15 * height); 
   fill(66, 241, 244);
-  rect(width * 0.75, height * 0.18, 145, 90);
+  rect(width * 0.75, height * 0.16, 0.15 * width , 0.14 * height);
   
   
 }
@@ -340,7 +340,7 @@ void draw() {
   }
   
   fill(0);
-  text("Area of Wire(m^2): " + a / 10000 + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + bField + "\nFlux through Wire(W): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + d +"\nInduced Current: " + directionOfCurrent , 0.65 * width , 0.1 * height);
+  text("Area of Wire(m^2): " + a / 10000 + "\nLoops of Wire: " + round(loops) + "\nMagnetic Field(T): " + bField + "\nFlux through Wire(W): " + b  + "\nChange in Flux (W/s): "  + c  + "\nInduced EMF (V): " + d +"\nInduced Current: " + directionOfCurrent , 0.65 * width , 0.07 * height);
   fill(200, 255, 200);
 
 
