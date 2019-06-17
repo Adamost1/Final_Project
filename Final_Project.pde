@@ -177,7 +177,7 @@ void keyPressed() {
     if (!(saved >= 10 || saved < 10)) { //if the user input is not a number, the 10s are arbitrary
       caseText = "\n                      Ms.Sharaf, do you not know what a number is?";
     } 
-    else if (saved < 0 ||(counter == 1  && saved < 0.02 * width) || (counter == 2 && saved < 0.02 * height)){ //checks if the input is too small
+    else if (saved < 0 || (counter == 0 && saved <= 0)||(counter == 1  && saved < 0.02 * width) || (counter == 2 && saved < 0.02 * height)){ //checks if the input is too small
       println("too small");
       caseText = "\n                      Value too small, try again";
     } 
