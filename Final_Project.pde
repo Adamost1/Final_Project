@@ -252,13 +252,13 @@ void generateUserInput() {
     text("" + caseText, 0.43 * width , 0.55 * height);
     text("Great, now type in the Length of the Wire in pixels! (100px:1m)" + caseText, 0.43 * width , 0.75 * height);
     fill(215, 244, 66);
-    text("Length (m): " + typing, 0.43 * width, 0.85 * height);
+    text("Length (px): " + typing, 0.43 * width, 0.85 * height);
     if (wireLength != 0) {
       background(0);
       fill(145,189,30);
       text("Great, now type in the Width of the Wire in pixels! (100px:1m)" + caseText, 0.43 * width , 0.75 * height);
       fill(215, 244, 66);
-      text("Width (m): " + typing, 0.43 * width, 0.85 * height);
+      text("Width (px): " + typing, 0.43 * width, 0.85 * height);
       if (wireWidth != 0) {
         background(0);
           fill(145,189,30);
